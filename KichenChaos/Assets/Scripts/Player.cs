@@ -82,34 +82,38 @@ public class Player : MonoBehaviour, IKichenObjectParent {
         Vector2 inputVector = gameInput.GetMovementVectorNormalized();
         Vector3 moveDir = new Vector3(inputVector.x, 0, inputVector.y);
         float moveDistance = moveSpeed * Time.deltaTime;
-
-        if (!IsCanMove(moveDir, moveDistance)) {
+        bool canMove = IsCanMove(moveDir, moveDistance);
+        if (!canMove) {
             //Cannot move towards moveDir
             //Attempt only X movement
             Vector3 moveDirX = new Vector3(moveDir.x, 0, 0).normalized;
-            if (IsCanMove(moveDirX, moveDistance)) {
+            canMove = moveDir.x != 0 && IsCanMove(moveDirX, moveDistance);
+
+            if (canMove) {
                 //Can move only on the X
                 moveDir = moveDirX;
             } else {
                 //Cannot move towards moveDir
                 //Attempt only Z movement
                 Vector3 moveDirZ = new Vector3(0, 0, moveDir.z).normalized;
-                if (IsCanMove(moveDirZ, moveDistance)) {
+                canMove = moveDir.z != 0 && IsCanMove(moveDirZ, moveDistance);
+
+                if (canMove) {
                     //Can move only on the Z
                     moveDir = moveDirZ;
                 } else {
                     //Can not move at all
-                    moveDir = Vector3.zero;
                 }
             }
         }
 
-        isWalking = moveDir != Vector3.zero;
-        if (isWalking) {
+        isWalking = canMove;
+        if (canMove) {
             transform.position += moveDir * moveDistance;
-            float rotateSpeed = 10f;
-            transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
         }
+
+        float rotateSpeed = 10f;
+        transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
     }
 
     private bool IsCanMove(Vector3 moveDir, float moveDistance) {
