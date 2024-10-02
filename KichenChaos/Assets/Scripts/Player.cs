@@ -32,9 +32,16 @@ public class Player : MonoBehaviour, IKichenObjectParent {
 
     private void Start() {
         gameInput.OnInteractAction += GameInput_OnInteractAction;
+		gameInput.OnInteractAlternateAction += GameInput_OnInteractAlternateAction;
     }
 
-    private void GameInput_OnInteractAction(object sender, EventArgs e) {
+	private void GameInput_OnInteractAlternateAction(object sender, EventArgs e) {
+        if (selectedCounter) {
+            selectedCounter.OnInteractAlternate(this);
+        }
+    }
+
+	private void GameInput_OnInteractAction(object sender, EventArgs e) {
         if (selectedCounter) {
             selectedCounter.Interact(this);
         }
