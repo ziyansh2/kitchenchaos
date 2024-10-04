@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1902273460045159409}
   - component: {fileID: 1690412981856666602}
   m_Layer: 6
-  m_Name: _BaseClearCounter
+  m_Name: _BaseCounter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
