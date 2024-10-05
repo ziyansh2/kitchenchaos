@@ -10,6 +10,8 @@ public class DeliveryCounter : BaseCounter {
 			//Player is carrying something
 			if (player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject)) {
 				//Player is holding a Plate
+
+				DeliveryManager.Instance.DeliverRecipe(plateKitchenObject);
 				player.GetKitchenObject().DestroySelf();
 			} 
 		}
