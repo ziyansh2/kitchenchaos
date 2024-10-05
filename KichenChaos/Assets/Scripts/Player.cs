@@ -119,8 +119,10 @@ public class Player : MonoBehaviour, IKichenObjectParent {
             transform.position += moveDir * moveDistance;
         }
 
-        float rotateSpeed = 10f;
-        transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
+        if (moveDir != Vector3.zero) {
+            float rotateSpeed = 10f;
+            transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
+        }
     }
 
     private bool IsCanMove(Vector3 moveDir, float moveDistance) {
