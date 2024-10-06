@@ -6,7 +6,7 @@ using UnityEngine;
 public class Player : MonoBehaviour, IKichenObjectParent {
 
     public static Player Instance { get; private set; }
-
+    public event EventHandler OnPickedSomething;
 
     public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
     public class OnSelectedCounterChangedEventArgs : EventArgs {
@@ -114,12 +114,12 @@ public class Player : MonoBehaviour, IKichenObjectParent {
             }
         }
 
-        isWalking = canMove;
         if (canMove) {
             transform.position += moveDir * moveDistance;
         }
 
-        if (moveDir != Vector3.zero) {
+        isWalking = moveDir != Vector3.zero;
+        if (isWalking) {
             float rotateSpeed = 10f;
             transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
         }
@@ -137,6 +137,10 @@ public class Player : MonoBehaviour, IKichenObjectParent {
 
     public void SetKitchenObject(KitchenObject kitchenObject) {
         this.kitchenObject = kitchenObject;
+
+        if (kitchenObject != null) {
+            OnPickedSomething?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     public KitchenObject GetKitchenObject() {
