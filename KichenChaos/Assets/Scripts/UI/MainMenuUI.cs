@@ -10,12 +10,14 @@ public class MainMenuUI : MonoBehaviour {
 	[SerializeField] private Button quitButton;
 
 	private void Awake() {
-		playButton.onClick.AddListener(()=> {
+		playButton.onClick.AddListener(() => {
 			Loader.Load(Loader.Scene.SC_Gameplay);
 		});
 		quitButton.onClick.AddListener(() => {
 			Application.Quit();
 		});
+
+		Time.timeScale = 1f;
 	}
 
 }
