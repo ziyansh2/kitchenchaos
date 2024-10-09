@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -7,6 +8,8 @@ using UnityEngine.UI;
 public class OptionsUI : MonoBehaviour {
 
 	public static OptionsUI Instance { get; private set; }
+
+	private Action onCloseButtonAction;
 
 	[SerializeField] private Button soundEffectsButton;
 	[SerializeField] private Button musicButton;
@@ -55,6 +58,7 @@ public class OptionsUI : MonoBehaviour {
 
 		closeButton.onClick.AddListener(() => {
 			Hide();
+			onCloseButtonAction();
 		});
 
 		moveUpButton.onClick.AddListener(() => RebindBinding(GameInput.Binding.Move_Up));
@@ -99,8 +103,10 @@ public class OptionsUI : MonoBehaviour {
 		gamepad_pauseText.text = GameInput.Instance.GetBindingText(GameInput.Binding.Gamepad_Pause);
 	}
 
-	public void Show() {
+	public void Show(Action onCloseButtonAction) {
+		this.onCloseButtonAction = onCloseButtonAction;
 		gameObject.SetActive(true);
+		soundEffectsButton.Select();
 	}
 
 	private void Hide() {
