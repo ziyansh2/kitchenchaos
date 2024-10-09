@@ -96,7 +96,7 @@ public class Player : MonoBehaviour, IKichenObjectParent {
             //Cannot move towards moveDir
             //Attempt only X movement
             Vector3 moveDirX = new Vector3(moveDir.x, 0, 0).normalized;
-            canMove = moveDir.x != 0 && IsCanMove(moveDirX, moveDistance);
+            canMove = Mathf.Abs(moveDir.x) >= 0.5f && IsCanMove(moveDirX, moveDistance);
 
             if (canMove) {
                 //Can move only on the X
@@ -105,7 +105,7 @@ public class Player : MonoBehaviour, IKichenObjectParent {
                 //Cannot move towards moveDir
                 //Attempt only Z movement
                 Vector3 moveDirZ = new Vector3(0, 0, moveDir.z).normalized;
-                canMove = moveDir.z != 0 && IsCanMove(moveDirZ, moveDistance);
+                canMove = Mathf.Abs(moveDir.z) >= 0.5f && IsCanMove(moveDirZ, moveDistance);
 
                 if (canMove) {
                     //Can move only on the Z

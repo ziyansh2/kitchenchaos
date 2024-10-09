@@ -40,7 +40,6 @@ public class KitchenGameManager : MonoBehaviour {
 	}
 
 	private void Update() {
-		Debug.Log(state);
 		switch (state) {
 			case State.WaitingToStart:
 				waitingToStartTimer -= Time.deltaTime;
