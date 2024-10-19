@@ -6,9 +6,16 @@ using UnityEngine;
 
 public class Player : NetworkBehaviour, IKichenObjectParent {
 
-    //public static Player Instance { get; private set; }
-    public event EventHandler OnPickedSomething;
+    public static Player LocalInstance { get; private set; }
 
+    public static event EventHandler OnAnyPlayerSpawned;
+    public static event EventHandler OnAnyPickedSomething;
+
+    public static void ResetStaticData() {
+        OnAnyPlayerSpawned = null;
+        OnAnyPickedSomething = null;
+    }
+    
     public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
     public class OnSelectedCounterChangedEventArgs : EventArgs {
         public BaseCounter selectedCounter;
@@ -23,13 +30,16 @@ public class Player : NetworkBehaviour, IKichenObjectParent {
     private BaseCounter selectedCounter;
     private KitchenObject kitchenObject;
 
-    private void Awake() {
-        //Instance = this;
-    }
-
     private void Start() {
         GameInput.Instance.OnInteractAction += GameInput_OnInteractAction;
         GameInput.Instance.OnInteractAlternateAction += GameInput_OnInteractAlternateAction;
+    }
+
+    public override void OnNetworkSpawn() {
+        if (IsOwner) {
+            LocalInstance = this;
+            OnAnyPlayerSpawned?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     private void GameInput_OnInteractAlternateAction(object sender, EventArgs e) {
@@ -139,7 +149,7 @@ public class Player : NetworkBehaviour, IKichenObjectParent {
         this.kitchenObject = kitchenObject;
 
         if (kitchenObject != null) {
-            OnPickedSomething?.Invoke(this, EventArgs.Empty);
+            OnAnyPickedSomething?.Invoke(this, EventArgs.Empty);
         }
     }
 
@@ -153,5 +163,9 @@ public class Player : NetworkBehaviour, IKichenObjectParent {
 
     public bool HasKitchenObject() {
         return kitchenObject != null;
+    }
+
+    public NetworkObject GetNetworkObject() {
+        return NetworkObject;
     }
 }

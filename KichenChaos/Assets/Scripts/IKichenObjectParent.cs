@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public interface IKichenObjectParent {
@@ -13,4 +14,6 @@ public interface IKichenObjectParent {
     public void ClearKitchenObject();
 
     public bool HasKitchenObject();
+
+    public NetworkObject GetNetworkObject();
 }

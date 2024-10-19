@@ -63,17 +63,39 @@ public class DeliveryManager : NetworkBehaviour {
 
 				if (plateContentMatchesRecipe) {
 					//Player delivered the correct recipe
-					waitingRecipeSOList.RemoveAt(i);
-					OnRecipeCompleted?.Invoke(this, EventArgs.Empty);
-					OnRecipeSuccess?.Invoke(this, EventArgs.Empty);
-					successfulRecipesAmount++;
+					DeliverCorrectReceipeServerRpc(i);
 					return;
 				}
 			}
 		}
 
 		//No matches found
+		DeliverIncorrectReceipeServerRpc();
+	}
+
+
+	[ServerRpc(RequireOwnership = false)]
+	private void DeliverIncorrectReceipeServerRpc() {
+		DeliverIncorrectReceipeClientRpc();
+	}
+
+	[ClientRpc]
+	private void DeliverIncorrectReceipeClientRpc() {
 		OnRecipeFailed?.Invoke(this, EventArgs.Empty);
+	}
+
+
+	[ServerRpc(RequireOwnership = false)]
+	private void DeliverCorrectReceipeServerRpc(int waitingRecipeSOListIndex) {
+		DeliverCorrectReceipeClientRpc(waitingRecipeSOListIndex);
+	}
+
+	[ClientRpc]
+	private void DeliverCorrectReceipeClientRpc(int waitingRecipeSOListIndex) {
+		waitingRecipeSOList.RemoveAt(waitingRecipeSOListIndex);
+		OnRecipeCompleted?.Invoke(this, EventArgs.Empty);
+		OnRecipeSuccess?.Invoke(this, EventArgs.Empty);
+		successfulRecipesAmount++;
 	}
 
 	public List<RecipeSO> GetWaitingRecipeSOList() {
