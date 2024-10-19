@@ -8,28 +8,39 @@ public class KitchenObject : NetworkBehaviour {
     [SerializeField] private KitchenObjectSO kitchenObjectSO;
 
     private IKichenObjectParent kitchenObjectParent;
+    private FollowTransform followTransform;
+
+    private void Awake() {
+        followTransform = GetComponent<FollowTransform>();
+    }
 
     public KitchenObjectSO GetKitchenObjectSO() {
         return kitchenObjectSO;
     }
 
-    public void SetKitchenObjectParent(IKichenObjectParent kichenObjectParent) {
+    public void SetKitchenObjectParent(IKichenObjectParent kitchenObjectParent) {
+        SetKitchenObjectParentServerRpc(kitchenObjectParent.GetNetworkObject());
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SetKitchenObjectParentServerRpc(NetworkObjectReference kichenObjectParentNetworkObjectReference) {
+        SetKitchenObjectParentClientRpc(kichenObjectParentNetworkObjectReference);
+    }
+
+    [ClientRpc]
+    private void SetKitchenObjectParentClientRpc(NetworkObjectReference kichenObjectParentNetworkObjectReference) {
+        kichenObjectParentNetworkObjectReference.TryGet(out NetworkObject kichenObjectParentNetworkObject);
+        kitchenObjectParent = kichenObjectParentNetworkObject.GetComponent<IKichenObjectParent>();
+
         if (kitchenObjectParent != null) {
             kitchenObjectParent.ClearKitchenObject();
         }
 
-        kitchenObjectParent = kichenObjectParent;
-        if (kichenObjectParent.HasKitchenObject()) {
+        if (kitchenObjectParent.HasKitchenObject()) {
             Debug.LogError("Counter already has a KitchenObject!");
         }
         kitchenObjectParent.SetKitchenObject(this);
-
-        //transform.parent = kichenObjectParent.GetKitchenObjectFollowTransform();
-        //transform.localPosition = Vector3.zero;
-    }
-
-    public IKichenObjectParent GetKitchenObjectParent() {
-        return kitchenObjectParent;
+        followTransform.SetTargetTransform(kitchenObjectParent.GetKitchenObjectFollowTransform());
     }
 
     public void DestroySelf() {

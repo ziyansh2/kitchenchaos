@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class BaseCounter : MonoBehaviour, IKichenObjectParent {
+public class BaseCounter : NetworkBehaviour, IKichenObjectParent {
 
     public static event EventHandler OnAnyObjectPlacedHere;
     public static void ResetStaticData() {
@@ -46,6 +46,6 @@ public class BaseCounter : MonoBehaviour, IKichenObjectParent {
     }
 
     public NetworkObject GetNetworkObject() {
-        return null;
+        return NetworkObject;
     }
 }
