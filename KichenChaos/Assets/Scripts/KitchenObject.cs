@@ -10,7 +10,7 @@ public class KitchenObject : NetworkBehaviour {
     private IKichenObjectParent kitchenObjectParent;
     private FollowTransform followTransform;
 
-    private void Awake() {
+    protected virtual void Awake() {
         followTransform = GetComponent<FollowTransform>();
     }
 
@@ -30,12 +30,15 @@ public class KitchenObject : NetworkBehaviour {
     [ClientRpc]
     private void SetKitchenObjectParentClientRpc(NetworkObjectReference kichenObjectParentNetworkObjectReference) {
         kichenObjectParentNetworkObjectReference.TryGet(out NetworkObject kichenObjectParentNetworkObject);
-        kitchenObjectParent = kichenObjectParentNetworkObject.GetComponent<IKichenObjectParent>();
+        IKichenObjectParent kitchenObjectParent = kichenObjectParentNetworkObject.GetComponent<IKichenObjectParent>();
 
-        if (kitchenObjectParent != null) {
-            kitchenObjectParent.ClearKitchenObject();
+        //Update old parent
+        if (this.kitchenObjectParent != null) {
+            this.kitchenObjectParent.ClearKitchenObject();
         }
+        this.kitchenObjectParent = kitchenObjectParent;
 
+        //Update new parent
         if (kitchenObjectParent.HasKitchenObject()) {
             Debug.LogError("Counter already has a KitchenObject!");
         }

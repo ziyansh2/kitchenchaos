@@ -16,7 +16,7 @@ PrefabInstance:
     - target: {fileID: 1194467556843531137, guid: 96505ad7f85c5204685f56e9036fcd6d,
         type: 3}
       propertyPath: m_Name
-      value: PlateCounter Variant
+      value: PlateCounter
       objectReference: {fileID: 0}
     - target: {fileID: 1902273460045159409, guid: 96505ad7f85c5204685f56e9036fcd6d,
         type: 3}
@@ -103,8 +103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2716ff43ab9c1ff41bbcb0a32732a28a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  counterTopPoint: {fileID: 6106646974686919277, guid: 185e45f64b9e478469c38c0f7ac2d769,
-    type: 3}
+  counterTopPoint: {fileID: 7446356573696224858}
   plateKitchenObjectSO: {fileID: 11400000, guid: 025a018539b6547498ea65c8eb049bf5,
     type: 2}
 --- !u!4 &2994846929999269830 stripped
@@ -137,6 +136,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 1a0afd856a35421469b28b916116fd9c, type: 2}
+    - target: {fileID: 4472461010448373620, guid: e21b499d164095947b7559f0267f0e63,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4589716710238282922, guid: e21b499d164095947b7559f0267f0e63,
         type: 3}
       propertyPath: m_Name
