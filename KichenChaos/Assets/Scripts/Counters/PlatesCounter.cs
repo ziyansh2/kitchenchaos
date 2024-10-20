@@ -36,7 +36,6 @@ public class PlatesCounter : BaseCounter {
         }
     }
 
-
     [ServerRpc(RequireOwnership = false)]
     private void InteractLogicServerRpc() {
         InteractLogicClientRpc();
@@ -47,7 +46,6 @@ public class PlatesCounter : BaseCounter {
         OnPlatePicked?.Invoke(this, EventArgs.Empty);
         platesSpawnedAmount--;
     }
-
 
     [ServerRpc(RequireOwnership = false)]
     private void SpawnPlateServerRpc() {
