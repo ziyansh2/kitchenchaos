@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class PlatesCounter : BaseCounter {
@@ -16,12 +17,12 @@ public class PlatesCounter : BaseCounter {
     private int platesSpawnedAmountMax = 4;
 
     private void Update() {
+        if (!IsServer) return;
         spawnPlateTimer += Time.deltaTime;
         if (spawnPlateTimer >= spawnPlateTimerMax) {
             spawnPlateTimer = 0;
             if (KitchenGameManager.Instance.IsGamePlaying() && platesSpawnedAmount < platesSpawnedAmountMax) {
-                platesSpawnedAmount++;
-                OnPlateSpawned?.Invoke(this, EventArgs.Empty);
+                SpawnPlateServerRpc();
             }
         }
 	}
@@ -30,10 +31,33 @@ public class PlatesCounter : BaseCounter {
         if (!player.HasKitchenObject()) {
             if (platesSpawnedAmount > 0) {
                 KitchenObject.SpawnKitchenObject(plateKitchenObjectSO, player);
-                OnPlatePicked?.Invoke(this, EventArgs.Empty);
-                platesSpawnedAmount--;
+                InteractLogicServerRpc();
             }
         }
+    }
+
+
+    [ServerRpc(RequireOwnership = false)]
+    private void InteractLogicServerRpc() {
+        InteractLogicClientRpc();
+    }
+
+    [ClientRpc]
+    private void InteractLogicClientRpc() {
+        OnPlatePicked?.Invoke(this, EventArgs.Empty);
+        platesSpawnedAmount--;
+    }
+
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SpawnPlateServerRpc() {
+        SpawnPlateClientRpc();
+    }
+
+    [ClientRpc]
+    private void SpawnPlateClientRpc() {
+        platesSpawnedAmount++;
+        OnPlateSpawned?.Invoke(this, EventArgs.Empty);
     }
 
 }
