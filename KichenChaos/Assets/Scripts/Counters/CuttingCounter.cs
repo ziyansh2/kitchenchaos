@@ -28,8 +28,7 @@ public class CuttingCounter : BaseCounter, IHasProgress {
 				if (HasRecipeWithInput(player.GetKitchenObject().GetKitchenObjectSO())) {
 					//Drop it to the counter
 					player.GetKitchenObject().SetKitchenObjectParent(this);
-					cuttingProgress = 0;
-					OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs() { progressNormalized = 0 });
+					InteractLogicPlaceObjectOnCounterServerRpc();
 				}
 			}
 		} else {
@@ -48,16 +47,26 @@ public class CuttingCounter : BaseCounter, IHasProgress {
 			} else {
 				//Player is not carrying anything
 				GetKitchenObject().SetKitchenObjectParent(player);
-				OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs() {
-					progressNormalized = 0
-				});
 			}
 		}
+	}
+
+
+	[ServerRpc(RequireOwnership = false)]
+	private void InteractLogicPlaceObjectOnCounterServerRpc() {
+		InteractLogicPlaceObjectOnCounterClientRpc();
+	}
+
+	[ClientRpc]
+	private void InteractLogicPlaceObjectOnCounterClientRpc() {
+		cuttingProgress = 0;
+		OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs() { progressNormalized = 0 });
 	}
 
 	public override void OnInteractAlternate(Player player) {
 		if (HasKitchenObject() && HasRecipeWithInput(GetKitchenObject().GetKitchenObjectSO())) {
 			CutObjectServerRpc();
+			TestCuttingProgressDoneServerRpc();
 		}
 	}
 
@@ -76,8 +85,13 @@ public class CuttingCounter : BaseCounter, IHasProgress {
 		OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs() {
 			progressNormalized = (float)cuttingProgress / cuttingRecipeSO.cuttingProgressMax
 		});
+	}
+
+	[ServerRpc(RequireOwnership = false)]
+	private void TestCuttingProgressDoneServerRpc() {
+		CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeSOWithInput(GetKitchenObject().GetKitchenObjectSO());
 		if (cuttingProgress >= cuttingRecipeSO.cuttingProgressMax) {
-			GetKitchenObject().DestroySelf();
+			KitchenObject.DestroyKitchenObject(GetKitchenObject());
 			KitchenObject.SpawnKitchenObject(cuttingRecipeSO.output, this);
 		}
 	}
