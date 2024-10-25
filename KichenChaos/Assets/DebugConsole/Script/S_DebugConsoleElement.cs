@@ -10,9 +10,11 @@ public class S_DebugConsoleElement : MonoBehaviour {
 
 	private string stackTrace;
 
+	public LogType Type { get; private set; }
+
 	private void Awake() {
 		detailButton.onClick.AddListener(() => {
-			S_DebugConsole.Instance.ShowStackTrace(stackTrace);
+			S_DebugConsole.Instance.ShowStackTrace(stackTrace, Type);
 		});
 	}
 	private void OnDestroy() {
@@ -21,6 +23,7 @@ public class S_DebugConsoleElement : MonoBehaviour {
 
 	public void SetDebugContents(string logString, string stackTrace, LogType type) {
 		this.stackTrace = stackTrace;
+		Type = type;
 
 		switch (type) {
 			default:
@@ -35,5 +38,4 @@ public class S_DebugConsoleElement : MonoBehaviour {
 				break;
 		}
 	}
-
 }
