@@ -8,6 +8,14 @@ public class S_DebugConsoleTest : MonoBehaviour {
 	[SerializeField] private bool isTest;
 
 
+	private void Start() {
+		S_DebugConsoleInput.Instance.RegisterConsoleAction("test action", ConsoleAction);
+	}
+
+	private void ConsoleAction() {
+		Debug.Log("Run Console Test Action");
+	}
+
 	void Update() {
 		UpdateDebugTest();
 	}
