@@ -23,7 +23,9 @@ public class Player : NetworkBehaviour, IKichenObjectParent {
 
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private LayerMask counterLayerMask;
+    [SerializeField] private LayerMask collisionsLayerMask;
     [SerializeField] private Transform kitchenObjectHoldPoint;
+    [SerializeField] private List<Vector3> spawnPositionList;
 
     private bool isWalking;
     private Vector3 lastInteractDir;
@@ -38,8 +40,9 @@ public class Player : NetworkBehaviour, IKichenObjectParent {
     public override void OnNetworkSpawn() {
         if (IsOwner) {
             LocalInstance = this;
-            OnAnyPlayerSpawned?.Invoke(this, EventArgs.Empty);
         }
+        transform.position = spawnPositionList[(int)OwnerClientId % 4];
+        OnAnyPlayerSpawned?.Invoke(this, EventArgs.Empty);
     }
 
     private void GameInput_OnInteractAlternateAction(object sender, EventArgs e) {
@@ -137,8 +140,7 @@ public class Player : NetworkBehaviour, IKichenObjectParent {
 
     private bool IsCanMove(Vector3 moveDir, float moveDistance) {
         float playerRadius = .7f;
-        float playerHeight = 2f;
-        return !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDir, moveDistance);
+        return !Physics.BoxCast(transform.position, Vector3.one * playerRadius, moveDir, Quaternion.identity, moveDistance, collisionsLayerMask);
     }
 
     public Transform GetKitchenObjectFollowTransform() {
