@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class WaitingForOtherPlayersUI : MonoBehaviour {
 
-
     private void Start() {
         KitchenGameManager.Instance.OnLocalPlayerReadyChange += KitchenGameManager_OnLocalPlayerReadyChange;
         KitchenGameManager.Instance.OnStateChanged += KitchenGameManager_OnStateChanged;
