@@ -8,7 +8,7 @@ public class S_OutlineColorTrigger : S_TriggerColor {
 
     private Outline outline;
 
-    protected virtual void Awake() {
+    protected override void Awake() {
         outline = GetComponent<Outline>();
         colorON = outline.effectColor;
         base.Awake();
