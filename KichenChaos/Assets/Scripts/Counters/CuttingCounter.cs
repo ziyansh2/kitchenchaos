@@ -28,7 +28,7 @@ public class CuttingCounter : BaseCounter, IHasProgress {
 				if (HasRecipeWithInput(player.GetKitchenObject().GetKitchenObjectSO())) {
 					//Drop it to the counter
 					player.GetKitchenObject().SetKitchenObjectParent(this);
-					InteractLogicPlaceObjectOnCounterServerRpc();
+					ResetCounterProgressServerRpc();
 				}
 			}
 		} else {
@@ -38,27 +38,26 @@ public class CuttingCounter : BaseCounter, IHasProgress {
 				if (player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject)) {
 					//Player is holding a Plate
 					if (plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectSO())) {
-						GetKitchenObject().DestroySelf();
-						OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs() {
-							progressNormalized = 0
-						});
+						KitchenObject.DestroyKitchenObject(GetKitchenObject());
+						ResetCounterProgressServerRpc();
 					}
 				}
 			} else {
 				//Player is not carrying anything
 				GetKitchenObject().SetKitchenObjectParent(player);
+				ResetCounterProgressServerRpc();
 			}
 		}
 	}
 
 
 	[ServerRpc(RequireOwnership = false)]
-	private void InteractLogicPlaceObjectOnCounterServerRpc() {
-		InteractLogicPlaceObjectOnCounterClientRpc();
+	private void ResetCounterProgressServerRpc() {
+		ResetCounterProgressOnCounterClientRpc();
 	}
 
 	[ClientRpc]
-	private void InteractLogicPlaceObjectOnCounterClientRpc() {
+	private void ResetCounterProgressOnCounterClientRpc() {
 		cuttingProgress = 0;
 		OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs() { progressNormalized = 0 });
 	}
