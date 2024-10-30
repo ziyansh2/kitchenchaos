@@ -24,7 +24,7 @@ public class KitchenGameManager : NetworkBehaviour {
 	private bool isLocalPlayerReady = false;
 	private NetworkVariable<float> countdownToStartTimer = new(3f);
 	private NetworkVariable<float> gameplayingTimer = new();
-	private float gameplayingTimerMax = 300f;
+	private float gameplayingTimerMax = 90f;
 	private bool isGamePaused = false;
 	private Dictionary<ulong, bool> playerReadyDictionary = new();
 
@@ -48,8 +48,8 @@ public class KitchenGameManager : NetworkBehaviour {
     private void GameInput_OnInteractAction(object sender, EventArgs e) {
 		if (state.Value == State.WaitingToStart) {
 			isLocalPlayerReady = true;
-			SetPlayerReadyServerRpc();
 			OnLocalPlayerReadyChange?.Invoke(this, EventArgs.Empty);
+			SetPlayerReadyServerRpc();
 		}
 	}
 
