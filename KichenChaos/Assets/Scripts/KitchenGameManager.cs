@@ -1,15 +1,17 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class KitchenGameManager : MonoBehaviour {
+public class KitchenGameManager : NetworkBehaviour {
 
 	public static KitchenGameManager Instance { get; private set; }
 
 	public event EventHandler OnStateChanged;
 	public event EventHandler OnPaused;
 	public event EventHandler OnUnpaused;
+	public event EventHandler OnLocalPlayerReadyChange;
 
 	private enum State {
 		WaitingToStart,
@@ -18,37 +20,47 @@ public class KitchenGameManager : MonoBehaviour {
 		GameOver
 	}
 
-	private State state;
-
-	private float countdownToStartTimer = 1f;
-	private float gameplayingTimer;
+	private NetworkVariable<State> state = new(State.WaitingToStart);
+	private bool isLocalPlayerReady = false;
+	private NetworkVariable<float> countdownToStartTimer = new(3f);
+	private NetworkVariable<float> gameplayingTimer = new();
 	private float gameplayingTimerMax = 300f;
 	private bool isGamePaused = false;
+	private Dictionary<ulong, bool> playerReadyDictionary = new();
 
 	private void Awake() {
 		Instance = this;
-		state = State.WaitingToStart;
 	}
 
 	private void Start() {
 		GameInput.Instance.OnPauseAction += GameInput_OnPauseAction;
 		GameInput.Instance.OnInteractAction += GameInput_OnInteractAction;
-
-
-
 	}
 
-	public void DebugStart() {
-		//Debug trigger game start automatically
-		state = State.CountdownToStart;
+	public override void OnNetworkSpawn() {
+		state.OnValueChanged += State_OnValueChanged;
+	}
+
+    private void State_OnValueChanged(State previousValue, State newValue) {
 		OnStateChanged?.Invoke(this, EventArgs.Empty);
 	}
 
-	private void GameInput_OnInteractAction(object sender, EventArgs e) {
-		if (state == State.WaitingToStart) {
-			state = State.CountdownToStart;
-			OnStateChanged?.Invoke(this, EventArgs.Empty);
+    private void GameInput_OnInteractAction(object sender, EventArgs e) {
+		if (state.Value == State.WaitingToStart) {
+			isLocalPlayerReady = true;
+			SetPlayerReadyServerRpc();
+			OnLocalPlayerReadyChange?.Invoke(this, EventArgs.Empty);
 		}
+	}
+
+	[ServerRpc(RequireOwnership = false)]
+	private void SetPlayerReadyServerRpc(ServerRpcParams serverRpcParam = default) {
+		playerReadyDictionary[serverRpcParam.Receive.SenderClientId] = true;
+
+        foreach (ulong clientID in NetworkManager.Singleton.ConnectedClientsIds) {
+			if (!playerReadyDictionary.ContainsKey(clientID) || playerReadyDictionary[clientID] == false) return;
+        }
+		state.Value = State.CountdownToStart;
 	}
 
 	private void GameInput_OnPauseAction(object sender, EventArgs e) {
@@ -56,22 +68,22 @@ public class KitchenGameManager : MonoBehaviour {
 	}
 
 	private void Update() {
-		switch (state) {
+		if (!IsServer) return;
+
+		switch (state.Value) {
 			case State.WaitingToStart:
 				break;
 			case State.CountdownToStart:
-				countdownToStartTimer -= Time.deltaTime;
-				if (countdownToStartTimer < 0) {
-					state = State.GamePlaying;
-					gameplayingTimer = gameplayingTimerMax;
-					OnStateChanged?.Invoke(this, EventArgs.Empty);
+				countdownToStartTimer.Value -= Time.deltaTime;
+				if (countdownToStartTimer.Value < 0) {
+					state.Value = State.GamePlaying;
+					gameplayingTimer.Value = gameplayingTimerMax;
 				}
 				break;
 			case State.GamePlaying:
-				gameplayingTimer -= Time.deltaTime;
-				if (gameplayingTimer < 0) {
-					state = State.GameOver;
-					OnStateChanged?.Invoke(this, EventArgs.Empty);
+				gameplayingTimer.Value -= Time.deltaTime;
+				if (gameplayingTimer.Value < 0) {
+					state.Value = State.GameOver;
 				}
 				break;
 			case State.GameOver:
@@ -80,25 +92,28 @@ public class KitchenGameManager : MonoBehaviour {
 	}
 
 	public bool IsGamePlaying() {
-		return state == State.GamePlaying;
+		return state.Value == State.GamePlaying;
 	}
 
 	public bool IsCountdownToStartActive() {
-		return state == State.CountdownToStart;
+		return state.Value == State.CountdownToStart;
 	}
 
 	public bool IsGameOver() {
-		return state == State.GameOver;
+		return state.Value == State.GameOver;
 	}
 
 	public float GetCountdownToStartTimer() {
-		return countdownToStartTimer;
+		return countdownToStartTimer.Value;
 	}
 
 	public float GetGamePlayingTimerNormalized() {
-		return 1 - gameplayingTimer / gameplayingTimerMax;
+		return 1 - gameplayingTimer.Value / gameplayingTimerMax;
 	}
 
+	public bool IsLocalPlayerReady() {
+		return isLocalPlayerReady;
+	}
 	public void TogglePauseGame() {
 		isGamePaused = !isGamePaused;
 		if (isGamePaused) {
