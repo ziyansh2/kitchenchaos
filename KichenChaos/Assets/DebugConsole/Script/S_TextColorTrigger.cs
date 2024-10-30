@@ -4,28 +4,17 @@ using UnityEngine;
 using TMPro;
 
 [RequireComponent(typeof(TextMeshProUGUI))]
-public class S_TextColorTrigger : MonoBehaviour {
-
-    [SerializeField] private bool isTriggered = true;
+public class S_TextColorTrigger : S_TriggerColor {
 
     private TextMeshProUGUI text;
-    private Color colorON;
-    private Color colorOFF;
 
-    private void Awake() {
+    protected override void Awake() {
         text = GetComponent<TextMeshProUGUI>();
         colorON = text.color;
-        colorOFF = colorON * .5f;
-        colorOFF.a = 1f;
-        UpdateTextColor();
+        base.Awake();
     }
 
-    public void TriggerColor() {
-        isTriggered = !isTriggered;
-        UpdateTextColor();
-    }
-
-    private void UpdateTextColor() {
+    protected override void UpdateColor() {
         text.color = isTriggered ? colorON : colorOFF;
     }
 

@@ -4,28 +4,17 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Outline))]
-public class S_OutlineColorTrigger : MonoBehaviour {
-
-    [SerializeField] private bool isTriggered = true;
+public class S_OutlineColorTrigger : S_TriggerColor {
 
     private Outline outline;
-    private Color colorON;
-    private Color colorOFF;
 
-    private void Awake() {
+    protected virtual void Awake() {
         outline = GetComponent<Outline>();
         colorON = outline.effectColor;
-        colorOFF = colorON * .5f;
-        colorOFF.a = 1f;
-        UpdateTextColor();
+        base.Awake();
     }
 
-    public void TriggerColor() {
-        isTriggered = !isTriggered;
-        UpdateTextColor();
-    }
-
-    private void UpdateTextColor() {
+    protected override void UpdateColor() {
         outline.effectColor = isTriggered ? colorON : colorOFF;
     }
 
