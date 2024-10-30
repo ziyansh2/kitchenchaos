@@ -133,6 +133,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 3639055901413882711}
+        m_TargetAssemblyTypeName: S_TextColorTrigger, Assembly-CSharp
+        m_MethodName: TriggerColor
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &334408345872652000
 GameObject:
   m_ObjectHideFlags: 0
@@ -428,6 +440,7 @@ GameObject:
   - component: {fileID: 4218886109083382176}
   - component: {fileID: 6778714123872293544}
   - component: {fileID: 4824841383891488227}
+  - component: {fileID: 6565564523228712343}
   m_Layer: 5
   m_Name: Image (1)
   m_TagString: Untagged
@@ -507,6 +520,19 @@ MonoBehaviour:
   m_EffectColor: {r: 1, g: 1, b: 1, a: 1}
   m_EffectDistance: {x: 2.5, y: -2.5}
   m_UseGraphicAlpha: 1
+--- !u!114 &6565564523228712343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 657195302758164342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae64516a6de39c143a4b10e1fef102b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isTriggered: 1
 --- !u!1 &710540690753387738
 GameObject:
   m_ObjectHideFlags: 0
@@ -1184,6 +1210,7 @@ GameObject:
   - component: {fileID: 8177828114450859651}
   - component: {fileID: 5512248219605803931}
   - component: {fileID: 7592885781252453653}
+  - component: {fileID: 347902961318447168}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -1307,6 +1334,19 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &347902961318447168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1830775399662090336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53f005483f7333340a5dcceed684100d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isTriggered: 1
 --- !u!1 &2681401016447212855
 GameObject:
   m_ObjectHideFlags: 0
@@ -1543,6 +1583,30 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 6565564523228712343}
+        m_TargetAssemblyTypeName: S_ImageColorTrigger, Assembly-CSharp
+        m_MethodName: TriggerColor
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1899987844711953593}
+        m_TargetAssemblyTypeName: S_ImageColorTrigger, Assembly-CSharp
+        m_MethodName: TriggerColor
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2794487288850875603
 GameObject:
   m_ObjectHideFlags: 0
@@ -1715,7 +1779,7 @@ MonoBehaviour:
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_PressedColor: {r: 1, g: 1, b: 1, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -1881,6 +1945,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1944691469417265849}
+        m_TargetAssemblyTypeName: S_TextColorTrigger, Assembly-CSharp
+        m_MethodName: TriggerColor
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &3590403083830313447
 GameObject:
   m_ObjectHideFlags: 0
@@ -2004,6 +2080,7 @@ GameObject:
   - component: {fileID: 4453576834137434547}
   - component: {fileID: 6502737858220467460}
   - component: {fileID: 7708922570205805285}
+  - component: {fileID: 1899987844711953593}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -2083,6 +2160,19 @@ MonoBehaviour:
   m_EffectColor: {r: 1, g: 1, b: 1, a: 1}
   m_EffectDistance: {x: 2.5, y: -2.5}
   m_UseGraphicAlpha: 1
+--- !u!114 &1899987844711953593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4338616626869261542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae64516a6de39c143a4b10e1fef102b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isTriggered: 1
 --- !u!1 &4417993243409421215
 GameObject:
   m_ObjectHideFlags: 0
@@ -2882,6 +2972,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 8261624936795697152}
+        m_TargetAssemblyTypeName: S_TextColorTrigger, Assembly-CSharp
+        m_MethodName: TriggerColor
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &6869680114846724210
 GameObject:
   m_ObjectHideFlags: 0
@@ -3508,6 +3610,7 @@ GameObject:
   - component: {fileID: 4871511494742506442}
   - component: {fileID: 1148453318594897533}
   - component: {fileID: 4960904459755555496}
+  - component: {fileID: 8261624936795697152}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -3631,6 +3734,19 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &8261624936795697152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8197572305724961014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53f005483f7333340a5dcceed684100d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isTriggered: 1
 --- !u!1 &8401967454375883584
 GameObject:
   m_ObjectHideFlags: 0
@@ -3642,6 +3758,7 @@ GameObject:
   - component: {fileID: 1634230476327926271}
   - component: {fileID: 1459353271227180650}
   - component: {fileID: 866803760723634771}
+  - component: {fileID: 3639055901413882711}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -3765,6 +3882,19 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &3639055901413882711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8401967454375883584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53f005483f7333340a5dcceed684100d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isTriggered: 1
 --- !u!1 &9136252347099699376
 GameObject:
   m_ObjectHideFlags: 0
@@ -3962,6 +4092,7 @@ GameObject:
   - component: {fileID: 5294770129101231449}
   - component: {fileID: 6237087988741735795}
   - component: {fileID: 7944437627019843618}
+  - component: {fileID: 1944691469417265849}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -4085,6 +4216,19 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &1944691469417265849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9151371295594040870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53f005483f7333340a5dcceed684100d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isTriggered: 1
 --- !u!1001 &9190442521193958497
 PrefabInstance:
   m_ObjectHideFlags: 0

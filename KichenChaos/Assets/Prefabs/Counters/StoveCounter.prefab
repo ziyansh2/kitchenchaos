@@ -497,8 +497,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ee7ca5d41ee5864ca5340381d18a460, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  counterTopPoint: {fileID: 6106646974686919277, guid: 8b270c3327a469546a2c695572d0507b,
-    type: 3}
+  counterTopPoint: {fileID: 6083440147323061044}
   fryingRecipeSOArray:
   - {fileID: 11400000, guid: f41aa7e647e6d0e4bbd618bd7ed0c79c, type: 2}
   burningRecipeSOArray:
@@ -506,6 +505,12 @@ MonoBehaviour:
 --- !u!4 &1924629299428778664 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1902273460045159409, guid: 96505ad7f85c5204685f56e9036fcd6d,
+    type: 3}
+  m_PrefabInstance: {fileID: 59553417636870489}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6083440147323061044 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6106646974686919277, guid: 96505ad7f85c5204685f56e9036fcd6d,
     type: 3}
   m_PrefabInstance: {fileID: 59553417636870489}
   m_PrefabAsset: {fileID: 0}
