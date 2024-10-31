@@ -11,7 +11,7 @@ public class S_DebugConsoleInput : MonoBehaviour {
 
 	private TMP_InputField debugConsoleInput;
 
-	Dictionary<string, Action> consoleActionMap = new();
+	private Dictionary<string, Action> consoleActionMap = new();
 
 
 	private void Awake() {
@@ -69,6 +69,5 @@ public class S_DebugConsoleInput : MonoBehaviour {
 			consoleActionMap.Add(key.ToLower(), action);
 		}
 	}
-
 
 }

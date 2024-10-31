@@ -11,29 +11,33 @@ public class S_DebugConsole : MonoBehaviour {
 
 	public EventHandler<bool> OnConsoleWindowTriggered;
 
+	[Header("Visual")]
 	[SerializeField] private RectTransform displayRect;
 	[SerializeField] private Slider consoleSlider;
 
-	[Space(10)]
+	[Space(10), Header("Log Elements")]
 	[SerializeField] private GameObject debugConsoleElement;
 	[SerializeField] private RectTransform debugContentOwner;
 
-	[Space(10)]
+	[Space(10), Header("Stack Trace")]
 	[SerializeField] private RectTransform stackTraceRect;
 	[SerializeField] private TMPro.TextMeshProUGUI stackTraceTitleText;
 	[SerializeField] private TMPro.TextMeshProUGUI stackTraceText;
 
-	[Space(10)]
+	[Space(10), Header("Input")]
 	[SerializeField] private KeyCode debugConsoleTrigger = KeyCode.F12;
 
+	//Visual
 	private float initHeight;
 	private float windowPosition;
 
+	//Filters
 	private bool isLogTriggered = true;
 	private bool isWarningTriggered = true;
 	private bool isErrorTriggered = true;
 	private bool isCollapseTriggered = false;
 
+	//Elements
 	private List<S_DebugConsoleElement> consoleElements = new();
 	private Dictionary<string, S_DebugConsoleElement> collapsedElements = new();
 
@@ -44,18 +48,21 @@ public class S_DebugConsole : MonoBehaviour {
 		} else {
 			Instance = this;
 		}
-
 		initHeight = displayRect.anchoredPosition.y;
-
-		consoleSlider.onValueChanged.AddListener(ChangeDisplayPosition);
 	}
 
 	private void OnEnable() {
 		Application.logMessageReceived += HandleLog;
 	}
 
+	private void OnDisable() {
+		Application.logMessageReceived -= HandleLog;
+	}
+
 	private void Start() {
+		consoleSlider.onValueChanged.AddListener(ChangeDisplayPosition);
 		HideStackTrace();
+		consoleSlider.value = consoleSlider.minValue;
 	}
 
 	private void Update() {
@@ -66,10 +73,6 @@ public class S_DebugConsole : MonoBehaviour {
 				consoleSlider.value = consoleSlider.maxValue;
 			}
 		}
-	}
-
-	private void OnDisable() {
-		Application.logMessageReceived -= HandleLog;
 	}
 
 	private void HandleLog(string logString, string stackTrace, LogType type) {
