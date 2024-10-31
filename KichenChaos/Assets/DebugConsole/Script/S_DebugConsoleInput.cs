@@ -25,10 +25,11 @@ public class S_DebugConsoleInput : MonoBehaviour {
 		debugConsoleInput.onSubmit.AddListener((string key) => {
 			if (consoleActionMap.ContainsKey(key.ToLower())) {
 				consoleActionMap[key.ToLower()]?.Invoke();
-				debugConsoleInput.text = "";
 			} else {
-				Debug.LogWarning("Console action does not exist!");
+				Debug.LogWarning($"Console action '{debugConsoleInput.text}' does not exist!");
 			}
+			debugConsoleInput.text = "";
+			debugConsoleInput.ActivateInputField();
 		});
 
 		RegisterConsoleAction("help", PrintAllConsoleAction);
@@ -41,7 +42,6 @@ public class S_DebugConsoleInput : MonoBehaviour {
 	private void OnConsoleWindowTriggered(object sender, bool e) {
 		if (e) {
 			debugConsoleInput.ActivateInputField();
-			debugConsoleInput.Select();
 		} else {
 			debugConsoleInput.DeactivateInputField();
 		}

@@ -4246,7 +4246,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6511555408230935066, guid: 11363718eb6634b49aa93b6d01e9b822,
         type: 3}
+      propertyPath: m_CaretWidth
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6511555408230935066, guid: 11363718eb6634b49aa93b6d01e9b822,
+        type: 3}
       propertyPath: m_Navigation.m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6511555408230935066, guid: 11363718eb6634b49aa93b6d01e9b822,
+        type: 3}
+      propertyPath: m_RestoreOriginalTextOnEscape
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7104796150203718485, guid: 11363718eb6634b49aa93b6d01e9b822,
