@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using System;
 using UnityEngine.Windows;
+using System.Reflection;
 
 public class S_DebugConsoleInput : MonoBehaviour {
 
@@ -24,7 +25,14 @@ public class S_DebugConsoleInput : MonoBehaviour {
 		debugConsoleInput = GetComponent<TMP_InputField>();
 		debugConsoleInput.onSubmit.AddListener((string key) => {
 			if (consoleActionMap.ContainsKey(key.ToLower())) {
-				consoleActionMap[key.ToLower()]?.Invoke();
+				//consoleActionMap[key.ToLower()]?.Invoke();
+
+				MethodInfo methodInfo = typeof(S_DebugConsoleTest).GetMethod("ConsoleAction");
+
+				//The way to run private function forcely
+				//MethodInfo methodInfo = typeof(S_DebugConsoleTest).GetMethod("ConsoleAction", BindingFlags.NonPublic | BindingFlags.Instance);
+				S_DebugConsoleTest s_DebugConsoleTest = FindAnyObjectByType<S_DebugConsoleTest>();
+				methodInfo.Invoke(s_DebugConsoleTest, new object[] { });
 			} else {
 				Debug.LogWarning($"Console action '{debugConsoleInput.text}' does not exist!");
 			}
