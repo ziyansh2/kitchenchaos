@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,10 @@ public class S_DebugConsole : MonoBehaviour {
 
 	public static S_DebugConsole Instance;
 
+	public EventHandler<bool> OnConsoleWindowTriggered;
+
 	[SerializeField] private RectTransform displayRect;
+	[SerializeField] private Slider consoleSlider;
 
 	[Space(10)]
 	[SerializeField] private GameObject debugConsoleElement;
@@ -19,7 +23,11 @@ public class S_DebugConsole : MonoBehaviour {
 	[SerializeField] private TMPro.TextMeshProUGUI stackTraceTitleText;
 	[SerializeField] private TMPro.TextMeshProUGUI stackTraceText;
 
+	[Space(10)]
+	[SerializeField] private KeyCode debugConsoleTrigger = KeyCode.F12;
+
 	private float initHeight;
+	private float windowPosition;
 
 	private bool isLogTriggered = true;
 	private bool isWarningTriggered = true;
@@ -38,6 +46,8 @@ public class S_DebugConsole : MonoBehaviour {
 		}
 
 		initHeight = displayRect.anchoredPosition.y;
+
+		consoleSlider.onValueChanged.AddListener(ChangeDisplayPosition);
 	}
 
 	private void OnEnable() {
@@ -46,6 +56,16 @@ public class S_DebugConsole : MonoBehaviour {
 
 	private void Start() {
 		HideStackTrace();
+	}
+
+	private void Update() {
+		if (Input.GetKeyDown(debugConsoleTrigger)) {
+			if (windowPosition > 0) {
+				consoleSlider.value = consoleSlider.minValue;
+			} else {
+				consoleSlider.value = consoleSlider.maxValue;
+			}
+		}
 	}
 
 	private void OnDisable() {
@@ -65,8 +85,10 @@ public class S_DebugConsole : MonoBehaviour {
 		UpdateCollapseFilter();
 	}
 
-	public void ChangeDisplayPosition(float newPosition) {
+	private void ChangeDisplayPosition(float newPosition) {
+		windowPosition = newPosition;
 		displayRect.anchoredPosition = new Vector2(displayRect.anchoredPosition.x, initHeight + newPosition);
+		OnConsoleWindowTriggered?.Invoke(this, newPosition > 0);
 	}
 
 	public void ShowStackTrace(string stackTrace, LogType type) {
@@ -94,6 +116,9 @@ public class S_DebugConsole : MonoBehaviour {
 		consoleElements.Clear();
 		collapsedElements.Clear();
 	}
+
+
+	#region Console Log Filter
 
 	public void TriggerLogFiltter() {
 		isLogTriggered = !isLogTriggered;
@@ -138,5 +163,7 @@ public class S_DebugConsole : MonoBehaviour {
 			consoleElement.gameObject.SetActive(isVisible);
 		}
 	}
+
+	#endregion
 
 }

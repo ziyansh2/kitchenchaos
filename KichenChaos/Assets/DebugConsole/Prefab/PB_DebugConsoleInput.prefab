@@ -148,7 +148,7 @@ GameObject:
   - component: {fileID: 6511555408230935066}
   - component: {fileID: 7086833596756106365}
   m_Layer: 5
-  m_Name: PB_DubugConsoleInput
+  m_Name: PB_DebugConsoleInput
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

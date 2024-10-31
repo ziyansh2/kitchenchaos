@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System;
+using UnityEngine.Windows;
 
 public class S_DebugConsoleInput : MonoBehaviour {
 
@@ -31,6 +32,19 @@ public class S_DebugConsoleInput : MonoBehaviour {
 		});
 
 		RegisterConsoleAction("help", PrintAllConsoleAction);
+	}
+
+	private void Start() {
+		S_DebugConsole.Instance.OnConsoleWindowTriggered += OnConsoleWindowTriggered;
+	}
+
+	private void OnConsoleWindowTriggered(object sender, bool e) {
+		if (e) {
+			debugConsoleInput.ActivateInputField();
+			debugConsoleInput.Select();
+		} else {
+			debugConsoleInput.DeactivateInputField();
+		}
 	}
 
 	private void OnDestroy() {
