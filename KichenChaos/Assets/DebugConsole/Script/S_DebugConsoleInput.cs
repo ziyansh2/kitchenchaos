@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using System;
 using System.Reflection;
+using Unity.VisualScripting;
 
 public class S_DebugConsoleInput : MonoBehaviour {
 
@@ -51,6 +52,11 @@ public class S_DebugConsoleInput : MonoBehaviour {
 
 	private void Start() {
 		S_DebugConsole.Instance.OnConsoleWindowTriggered += OnConsoleWindowTriggered;
+
+		RegisterConsoleAction("clear", new ActionInfoData {
+			actionOwner = S_DebugConsole.Instance,
+			methodInfo = GetPublicMethodInfo(typeof(S_DebugConsole), "ClearLog")
+		});
 	}
 
 	private void OnConsoleWindowTriggered(object sender, bool e) {
@@ -64,6 +70,7 @@ public class S_DebugConsoleInput : MonoBehaviour {
 	private void OnDestroy() {
 		debugConsoleInput.onSubmit.RemoveAllListeners();
 	}
+
 
 	private void PrintAllConsoleAction() {
 		string result = "---------Print Out All Console Actions----------";
