@@ -1,16 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 using System;
 using System.Reflection;
-using Unity.VisualScripting;
 
 public class S_DebugConsoleInput : MonoBehaviour {
 
 	public static S_DebugConsoleInput Instance;
 
-	private TMP_InputField debugConsoleInput;
+	private TMPro.TMP_InputField debugConsoleInput;
 
 	private Dictionary<string, ActionInfoData> consoleActionMap = new();
 
@@ -22,7 +20,7 @@ public class S_DebugConsoleInput : MonoBehaviour {
 			Instance = this;
 		}
 
-		debugConsoleInput = GetComponent<TMP_InputField>();
+		debugConsoleInput = GetComponent<TMPro.TMP_InputField>();
 		debugConsoleInput.onSubmit.AddListener((string key) => {
 			string[] inputArray = key.Split(' ');
 			string command = inputArray[0];
@@ -35,6 +33,25 @@ public class S_DebugConsoleInput : MonoBehaviour {
 			if (consoleActionMap.ContainsKey(command.ToLower())) {
 				MethodInfo methodInfo = consoleActionMap[command.ToLower()].methodInfo;
 				var actionOwner = consoleActionMap[command.ToLower()].actionOwner;
+
+
+				ParameterInfo[] pars = methodInfo.GetParameters();
+
+				for (int i = 0; i < pars.Length; i++){
+					Debug.Log(pars[i].ParameterType);
+					switch (pars[i].ParameterType.ToString()) {
+						case "System.String": break;
+						case "System.Int32":
+							inputParams[i] =  (inputParams[i].ToString());
+							break;
+					}
+				}
+
+				
+
+				foreach (ParameterInfo p in pars) {
+					Debug.Log(p.ParameterType);
+				}
 
 				methodInfo.Invoke(actionOwner, inputParams);
 			} else {

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class S_DebugConsoleElement : MonoBehaviour {
 
-	[SerializeField] TMPro.TextMeshProUGUI debugText;
+	[SerializeField] TMPro.TMP_InputField debugText;
 	[SerializeField] Button detailButton;
 
 	private string stackTrace;

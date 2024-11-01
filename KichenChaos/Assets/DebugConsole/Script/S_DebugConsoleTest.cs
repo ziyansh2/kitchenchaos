@@ -27,7 +27,7 @@ public class S_DebugConsoleTest : MonoBehaviour {
 		Debug.Log("Run Console Test Action 1");
 	}
 
-	private void ConsoleActionTest2(string testIndex) {
+	private void ConsoleActionTest2(int testIndex) {
 		Debug.Log($"Run Console Test Action2: {testIndex}");
 	}
 

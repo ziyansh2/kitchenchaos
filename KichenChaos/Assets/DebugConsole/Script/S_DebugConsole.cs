@@ -22,7 +22,7 @@ public class S_DebugConsole : MonoBehaviour {
 	[Space(10), Header("Stack Trace")]
 	[SerializeField] private RectTransform stackTraceRect;
 	[SerializeField] private TMPro.TextMeshProUGUI stackTraceTitleText;
-	[SerializeField] private TMPro.TextMeshProUGUI stackTraceText;
+	[SerializeField] private TMPro.TMP_InputField stackTraceText;
 
 	[Space(10), Header("Input")]
 	[SerializeField] private KeyCode debugConsoleTrigger = KeyCode.F12;
