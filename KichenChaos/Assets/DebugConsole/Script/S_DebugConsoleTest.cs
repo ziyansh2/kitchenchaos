@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using UnityEngine;
 
@@ -9,11 +10,25 @@ public class S_DebugConsoleTest : MonoBehaviour {
 
 
 	private void Start() {
-		S_DebugConsoleInput.Instance.RegisterConsoleAction("test action", ConsoleAction);
+		S_DebugConsoleInput.Instance.RegisterConsoleAction("test1",
+			new S_DebugConsoleInput.ActionInfoData {
+				actionOwner = this,
+				methodInfo = S_DebugConsoleInput.GetPublicMethodInfo(GetType(), "ConsoleActionTest1")
+			});
+		
+		S_DebugConsoleInput.Instance.RegisterConsoleAction("test2", 
+			new S_DebugConsoleInput.ActionInfoData {
+				actionOwner = this,
+				methodInfo = S_DebugConsoleInput.GetPrivateMethodInfo(GetType(), "ConsoleActionTest2")
+			});
 	}
 
-	private void ConsoleAction() {
-		Debug.Log("Run Console Test Action");
+	public void ConsoleActionTest1() {
+		Debug.Log("Run Console Test Action 1");
+	}
+
+	private void ConsoleActionTest2(string testIndex) {
+		Debug.Log($"Run Console Test Action2: {testIndex}");
 	}
 
 	void Update() {

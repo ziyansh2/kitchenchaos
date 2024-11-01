@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System;
-using UnityEngine.Windows;
 using System.Reflection;
 
 public class S_DebugConsoleInput : MonoBehaviour {
@@ -12,7 +11,7 @@ public class S_DebugConsoleInput : MonoBehaviour {
 
 	private TMP_InputField debugConsoleInput;
 
-	private Dictionary<string, Action> consoleActionMap = new();
+	private Dictionary<string, ActionInfoData> consoleActionMap = new();
 
 
 	private void Awake() {
@@ -24,15 +23,19 @@ public class S_DebugConsoleInput : MonoBehaviour {
 
 		debugConsoleInput = GetComponent<TMP_InputField>();
 		debugConsoleInput.onSubmit.AddListener((string key) => {
-			if (consoleActionMap.ContainsKey(key.ToLower())) {
-				//consoleActionMap[key.ToLower()]?.Invoke();
+			string[] inputArray = key.Split(' ');
+			string command = inputArray[0];
+			object[] inputParams = new object[inputArray.Length - 1];
 
-				MethodInfo methodInfo = typeof(S_DebugConsoleTest).GetMethod("ConsoleAction");
+			for (int i = 0; i < inputParams.Length; i++) {
+				inputParams[i] = inputArray[i + 1];
+			}
 
-				//The way to run private function forcely
-				//MethodInfo methodInfo = typeof(S_DebugConsoleTest).GetMethod("ConsoleAction", BindingFlags.NonPublic | BindingFlags.Instance);
-				S_DebugConsoleTest s_DebugConsoleTest = FindAnyObjectByType<S_DebugConsoleTest>();
-				methodInfo.Invoke(s_DebugConsoleTest, new object[] { });
+			if (consoleActionMap.ContainsKey(command.ToLower())) {
+				MethodInfo methodInfo = consoleActionMap[command.ToLower()].methodInfo;
+				var actionOwner = consoleActionMap[command.ToLower()].actionOwner;
+
+				methodInfo.Invoke(actionOwner, inputParams);
 			} else {
 				Debug.LogWarning($"Console action '{debugConsoleInput.text}' does not exist!");
 			}
@@ -40,7 +43,10 @@ public class S_DebugConsoleInput : MonoBehaviour {
 			debugConsoleInput.ActivateInputField();
 		});
 
-		RegisterConsoleAction("help", PrintAllConsoleAction);
+		RegisterConsoleAction("help", new ActionInfoData {
+			actionOwner = this,
+			methodInfo = GetPrivateMethodInfo(GetType(), "PrintAllConsoleAction")
+		});
 	}
 
 	private void Start() {
@@ -70,12 +76,26 @@ public class S_DebugConsoleInput : MonoBehaviour {
 		Debug.Log(result);
 	}
 
-	public void RegisterConsoleAction(string key, Action action) {
+	public void RegisterConsoleAction(string key, ActionInfoData actionInfoData) {
 		if (consoleActionMap.ContainsKey(key.ToLower())) {
-			consoleActionMap[key.ToLower()] = action;
+			consoleActionMap[key.ToLower()] = actionInfoData;
 		} else {
-			consoleActionMap.Add(key.ToLower(), action);
+			consoleActionMap.Add(key.ToLower(), actionInfoData);
 		}
+	}
+
+	public static MethodInfo GetPrivateMethodInfo(Type methodType, string methodName) {
+		return methodType.GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Instance);
+	}
+
+	public static MethodInfo GetPublicMethodInfo(Type methodType, string methodName, bool isPublic = true) {
+		return methodType.GetMethod(methodName);
+	}
+
+
+	public class ActionInfoData {
+		public Component actionOwner;
+		public MethodInfo methodInfo;
 	}
 
 }
