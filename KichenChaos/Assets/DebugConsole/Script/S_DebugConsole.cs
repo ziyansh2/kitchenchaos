@@ -5,168 +5,185 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class S_DebugConsole : MonoBehaviour {
 
-	public static S_DebugConsole Instance;
+namespace DebugConsole {
 
-	public EventHandler<bool> OnConsoleWindowTriggered;
+	public class S_DebugConsole : MonoBehaviour {
 
-	[Header("Visual")]
-	[SerializeField] private RectTransform displayRect;
-	[SerializeField] private Slider consoleSlider;
+		public static S_DebugConsole Instance;
 
-	[Space(10), Header("Log Elements")]
-	[SerializeField] private GameObject debugConsoleElement;
-	[SerializeField] private RectTransform debugContentOwner;
+		public EventHandler<bool> OnConsoleWindowTriggered;
 
-	[Space(10), Header("Stack Trace")]
-	[SerializeField] private RectTransform stackTraceRect;
-	[SerializeField] private TMPro.TextMeshProUGUI stackTraceTitleText;
-	[SerializeField] private TMPro.TMP_InputField stackTraceText;
+		[Header("Visual")]
+		[SerializeField] private RectTransform displayRect;
+		[SerializeField] private Slider consoleSlider;
 
-	[Space(10), Header("Input")]
-	[SerializeField] private KeyCode debugConsoleTrigger = KeyCode.F12;
+		[Space(10), Header("Log Elements")]
+		[SerializeField] private GameObject debugConsoleElement;
+		[SerializeField] private ScrollRect debugContentScrollRect;
 
-	//Visual
-	private float initHeight;
-	private float windowPosition;
+		[Space(10), Header("Stack Trace")]
+		[SerializeField] private RectTransform stackTraceRect;
+		[SerializeField] private TMPro.TextMeshProUGUI stackTraceTitleText;
+		[SerializeField] private TMPro.TMP_InputField stackTraceText;
 
-	//Filters
-	private bool isLogTriggered = true;
-	private bool isWarningTriggered = true;
-	private bool isErrorTriggered = true;
-	private bool isCollapseTriggered = false;
+		[Space(10), Header("Input")]
+		[SerializeField] private KeyCode debugConsoleTrigger = KeyCode.F12;
 
-	//Elements
-	private List<S_DebugConsoleElement> consoleElements = new();
-	private Dictionary<string, S_DebugConsoleElement> collapsedElements = new();
+		//Visual
+		private float initHeight;
+		private float windowPosition;
+
+		//Filters
+		private bool isLogTriggered = true;
+		private bool isWarningTriggered = true;
+		private bool isErrorTriggered = true;
+		private bool isCollapseTriggered = false;
+
+		//Elements
+		private List<S_DebugConsoleElement> consoleElements = new();
+		private Dictionary<string, S_DebugConsoleElement> collapsedElements = new();
+		private RectTransform debugContentsRoot;
 
 
-	private void Awake() {
-		if (Instance != null) {
-			DestroyImmediate(gameObject);
-		} else {
-			Instance = this;
-		}
-		initHeight = displayRect.anchoredPosition.y;
-	}
-
-	private void OnEnable() {
-		Application.logMessageReceived += HandleLog;
-	}
-
-	private void OnDisable() {
-		Application.logMessageReceived -= HandleLog;
-	}
-
-	private void Start() {
-		consoleSlider.onValueChanged.AddListener(ChangeDisplayPosition);
-		HideStackTrace();
-		consoleSlider.value = consoleSlider.minValue;
-	}
-
-	private void Update() {
-		if (Input.GetKeyDown(debugConsoleTrigger)) {
-			if (windowPosition > 0) {
-				consoleSlider.value = consoleSlider.minValue;
+		private void Awake() {
+			if (Instance != null) {
+				DestroyImmediate(gameObject);
 			} else {
-				consoleSlider.value = consoleSlider.maxValue;
+				Instance = this;
+			}
+			initHeight = displayRect.anchoredPosition.y;
+			debugContentsRoot = debugContentScrollRect.GetComponent<RectTransform>();
+		}
+
+		private void OnEnable() {
+			Application.logMessageReceived += HandleLog;
+		}
+
+		private void OnDisable() {
+			Application.logMessageReceived -= HandleLog;
+		}
+
+		private void Start() {
+			consoleSlider.onValueChanged.AddListener(ChangeDisplayPosition);
+			HideStackTrace();
+			consoleSlider.value = consoleSlider.minValue;
+		}
+
+		private void Update() {
+			if (Input.GetKeyDown(debugConsoleTrigger)) {
+				if (windowPosition > 0) {
+					consoleSlider.value = consoleSlider.minValue;
+				} else {
+					consoleSlider.value = consoleSlider.maxValue;
+				}
 			}
 		}
-	}
 
-	private void HandleLog(string logString, string stackTrace, LogType type) {
-		S_DebugConsoleElement element = Instantiate(debugConsoleElement, debugContentOwner).GetComponent<S_DebugConsoleElement>();
-		element.SetDebugContents(logString, stackTrace, type);
-		consoleElements.Add(element);
-		if (collapsedElements.Keys.Contains(logString)) {
-			collapsedElements[logString]= element;
-		} else {
-			collapsedElements.Add(logString, element);
+
+		private void HandleLog(string logString, string stackTrace, LogType type) {
+			S_DebugConsoleElement element = Instantiate(debugConsoleElement, debugContentScrollRect.content).GetComponent<S_DebugConsoleElement>();
+
+			element.SetDebugContents(logString, stackTrace, type);
+			consoleElements.Add(element);
+			if (collapsedElements.Keys.Contains(logString)) {
+				collapsedElements[logString] = element;
+			} else {
+				collapsedElements.Add(logString, element);
+			}
+			
+			UpdateCollapseFilter();
 		}
-		
-		UpdateCollapseFilter();
-	}
 
-	private void ChangeDisplayPosition(float newPosition) {
-		windowPosition = newPosition;
-		displayRect.anchoredPosition = new Vector2(displayRect.anchoredPosition.x, initHeight + newPosition);
-		OnConsoleWindowTriggered?.Invoke(this, newPosition > 0);
-	}
-
-	public void ShowStackTrace(string stackTrace, LogType type) {
-		stackTraceRect.gameObject.SetActive(true);
-		stackTraceText.text = stackTrace;
-
-		Color color = Color.white;
-		if (type == LogType.Warning) {
-			color = (Color.yellow + Color.red) / 2;
-		} else if (type == LogType.Error) { 
-			color = Color.red;
+		private void ChangeDisplayPosition(float newPosition) {
+			windowPosition = newPosition;
+			displayRect.anchoredPosition = new Vector2(displayRect.anchoredPosition.x, initHeight + newPosition);
+			OnConsoleWindowTriggered?.Invoke(this, newPosition > 0);
 		}
-		stackTraceTitleText.color = color;
-		stackTraceTitleText.text = $"Detail Window ({type.ToString()})"; 
-	}
 
-	public void HideStackTrace() {
-		stackTraceRect.gameObject.SetActive(false);
-	}
+		public void ShowStackTrace(string stackTrace, LogType type) {
+			stackTraceRect.gameObject.SetActive(true);
+			stackTraceText.text = stackTrace;
 
-	public void ClearLog() {
-		while (debugContentOwner.childCount > 0) {
-			DestroyImmediate(debugContentOwner.GetChild(0).gameObject);
+			Color color = Color.white;
+			if (type == LogType.Warning) {
+				color = (Color.yellow + Color.red) / 2;
+			} else if (type == LogType.Error) {
+				color = Color.red;
+			}
+			stackTraceTitleText.color = color;
+			stackTraceTitleText.text = $"Detail Window ({type.ToString()})";
 		}
-		consoleElements.Clear();
-		collapsedElements.Clear();
-	}
+
+		public void HideStackTrace() {
+			stackTraceRect.gameObject.SetActive(false);
+		}
+
+		public void ClearLog() {
+			while (debugContentScrollRect.content.childCount > 0) {
+				DestroyImmediate(debugContentScrollRect.content.GetChild(0).gameObject);
+			}
+			consoleElements.Clear();
+			collapsedElements.Clear();
+		}
 
 
-	#region Console Log Filter
+		#region Console Log Filter
 
-	public void TriggerLogFiltter() {
-		isLogTriggered = !isLogTriggered;
-		UpdateAfterFilterUpdate();
-	}
+		public void TriggerLogFiltter() {
+			isLogTriggered = !isLogTriggered;
+			UpdateAfterFilterUpdate();
+		}
 
-	public void TriggerWarningFiltter() {
-		isWarningTriggered = !isWarningTriggered;
-		UpdateAfterFilterUpdate();
-	}
+		public void TriggerWarningFiltter() {
+			isWarningTriggered = !isWarningTriggered;
+			UpdateAfterFilterUpdate();
+		}
 
-	public void TriggerErrorFiltter() {
-		isErrorTriggered = !isErrorTriggered;
-		UpdateAfterFilterUpdate();
-	}
+		public void TriggerErrorFiltter() {
+			isErrorTriggered = !isErrorTriggered;
+			UpdateAfterFilterUpdate();
+		}
 
-	private void UpdateAfterFilterUpdate() {
-		foreach (S_DebugConsoleElement consoleElement in consoleElements) {
-			switch (consoleElement.Type) {
-				default:
-				case LogType.Log:
-					consoleElement.gameObject.SetActive(isLogTriggered);
-					break;
-				case LogType.Warning:
-					consoleElement.gameObject.SetActive(isWarningTriggered);
-					break;
-				case LogType.Error:
-					consoleElement.gameObject.SetActive(isErrorTriggered);
-					break;
+		private void UpdateAfterFilterUpdate() {
+			foreach (S_DebugConsoleElement consoleElement in consoleElements) {
+				switch (consoleElement.Type) {
+					default:
+					case LogType.Log:
+						consoleElement.gameObject.SetActive(isLogTriggered);
+						break;
+					case LogType.Warning:
+						consoleElement.gameObject.SetActive(isWarningTriggered);
+						break;
+					case LogType.Error:
+						consoleElement.gameObject.SetActive(isErrorTriggered);
+						break;
+				}
 			}
 		}
-	}
 
-	public void TriggerCollapseFilter() {
-		isCollapseTriggered = !isCollapseTriggered;
-		UpdateCollapseFilter();
-	}
-
-	private void UpdateCollapseFilter() {
-		foreach (S_DebugConsoleElement consoleElement in consoleElements) {
-			bool isVisible = !isCollapseTriggered || (isCollapseTriggered && collapsedElements.Values.Contains(consoleElement));
-			consoleElement.gameObject.SetActive(isVisible);
+		public void TriggerCollapseFilter() {
+			isCollapseTriggered = !isCollapseTriggered;
+			UpdateCollapseFilter();
 		}
+
+		private void UpdateCollapseFilter() {
+			foreach (S_DebugConsoleElement consoleElement in consoleElements) {
+				bool isVisible = !isCollapseTriggered || (isCollapseTriggered && collapsedElements.Values.Contains(consoleElement));
+				consoleElement.gameObject.SetActive(isVisible);
+			}
+
+			//Update the content root immediately
+			LayoutRebuilder.ForceRebuildLayoutImmediate(debugContentScrollRect.content);
+			LayoutRebuilder.ForceRebuildLayoutImmediate(debugContentsRoot);
+			Invoke("ScrollToEnd", .05f);
+		}
+
+		private void ScrollToEnd() {
+			debugContentScrollRect.normalizedPosition = new Vector2(0, 0);  //scroll to the end
+		}
+
+		#endregion
+
 	}
-
-	#endregion
-
 }

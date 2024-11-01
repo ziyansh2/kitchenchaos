@@ -3,39 +3,43 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class S_DebugConsoleElement : MonoBehaviour {
+namespace DebugConsole {
 
-	[SerializeField] TMPro.TMP_InputField debugText;
-	[SerializeField] Button detailButton;
+	public class S_DebugConsoleElement : MonoBehaviour {
 
-	private string stackTrace;
+		[SerializeField] TMPro.TMP_InputField debugText;
+		[SerializeField] Button detailButton;
 
-	public LogType Type { get; private set; }
+		private string stackTrace;
 
-	private void Awake() {
-		detailButton.onClick.AddListener(() => {
-			S_DebugConsole.Instance.ShowStackTrace(stackTrace, Type);
-		});
-	}
-	private void OnDestroy() {
-		detailButton.onClick.RemoveAllListeners();
-	}
+		public LogType Type { get; private set; }
 
-	public void SetDebugContents(string logString, string stackTrace, LogType type) {
-		this.stackTrace = stackTrace;
-		Type = type;
+		private void Awake() {
+			detailButton.onClick.AddListener(() => {
+				S_DebugConsole.Instance.ShowStackTrace(stackTrace, Type);
+			});
+		}
+		private void OnDestroy() {
+			detailButton.onClick.RemoveAllListeners();
+		}
 
-		switch (type) {
-			default:
-			case LogType.Log:
-				debugText.text = logString;
-				break;
-			case LogType.Warning:
-				debugText.text = $"<color=orange>" + logString + "<color=orange>\n";
-				break;
-			case LogType.Error:
-				debugText.text = $"<color=red>" + logString + "<color=red>\n";
-				break;
+		public void SetDebugContents(string logString, string stackTrace, LogType type) {
+			this.stackTrace = stackTrace;
+			Type = type;
+
+			switch (type) {
+				default:
+				case LogType.Log:
+					debugText.text = logString;
+					break;
+				case LogType.Warning:
+					debugText.text = $"<color=orange>" + logString + "<color=orange>\n";
+					break;
+				case LogType.Error:
+					debugText.text = $"<color=red>" + logString + "<color=red>\n";
+					break;
+			}
 		}
 	}
+
 }

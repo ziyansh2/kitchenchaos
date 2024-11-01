@@ -1,8 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
 using UnityEngine;
+using DebugConsole;
 
 public class S_DebugConsoleTest : MonoBehaviour {
 
@@ -10,25 +9,16 @@ public class S_DebugConsoleTest : MonoBehaviour {
 
 
 	private void Start() {
-		S_DebugConsoleInput.Instance.RegisterConsoleAction("test1",
-			new S_DebugConsoleInput.ActionInfoData {
-				actionOwner = this,
-				methodInfo = S_DebugConsoleInput.GetPublicMethodInfo(GetType(), "ConsoleActionTest1")
-			});
-		
-		S_DebugConsoleInput.Instance.RegisterConsoleAction("test2", 
-			new S_DebugConsoleInput.ActionInfoData {
-				actionOwner = this,
-				methodInfo = S_DebugConsoleInput.GetPrivateMethodInfo(GetType(), "ConsoleActionTest2")
-			});
+		S_DebugConsoleInput.RegisterConsoleAction("test1", S_DebugConsoleInput.MakeActionInfoData(this, "ConsoleActionTest1"));
+		S_DebugConsoleInput.RegisterConsoleAction("test2", S_DebugConsoleInput.MakeActionInfoData(this, "ConsoleActionTest2", "Test Something", false));
 	}
 
 	public void ConsoleActionTest1() {
 		Debug.Log("Run Console Test Action 1");
 	}
 
-	private void ConsoleActionTest2(int testIndex) {
-		Debug.Log($"Run Console Test Action2: {testIndex}");
+	private void ConsoleActionTest2(bool testValue, float testValue2) {
+		Debug.Log($"Run Console Test Action2: {testValue}, {testValue2}");
 	}
 
 	void Update() {
