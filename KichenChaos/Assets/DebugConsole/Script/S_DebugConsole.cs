@@ -80,7 +80,6 @@ namespace DebugConsole {
 			}
 		}
 
-
 		private void HandleLog(string logString, string stackTrace, LogType type) {
 			S_DebugConsoleContentElement element = Instantiate(debugConsoleElement, debugContentScrollRect.content).GetComponent<S_DebugConsoleContentElement>();
 
@@ -112,7 +111,7 @@ namespace DebugConsole {
 				color = Color.red;
 			}
 			stackTraceTitleText.color = color;
-			stackTraceTitleText.text = $"Detail Window ({type.ToString()})";
+			stackTraceTitleText.text = $"Detail Window ({type})";
 		}
 
 		public void HideStackTrace() {

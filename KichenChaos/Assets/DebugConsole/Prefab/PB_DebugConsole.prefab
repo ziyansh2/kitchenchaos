@@ -1437,6 +1437,7 @@ MonoBehaviour:
   debugConsoleHelpElement: {fileID: 2098101267039710928, guid: fef7723ff1e438a449386d60ed2e8ec8,
     type: 3}
   debugConsoleHelpScroll: {fileID: 4228637181128275800}
+  debugConsoleHelpWindow: {fileID: 513056716280184215}
 --- !u!1 &1789002028804387145
 GameObject:
   m_ObjectHideFlags: 0
@@ -3335,9 +3336,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2041073844721524790}
-        m_TargetAssemblyTypeName: S_DebugConsole, Assembly-CSharp
-        m_MethodName: HideStackTrace
+      - m_Target: {fileID: 4567584107469795381}
+        m_TargetAssemblyTypeName: DebugConsole.S_DebugConsoleHelp, Assembly-CSharp
+        m_MethodName: TriggerHelpWindow
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -9,10 +9,14 @@ namespace DebugConsole {
 
         [SerializeField] private GameObject debugConsoleHelpElement;
         [SerializeField] private ScrollRect debugConsoleHelpScroll;
+        [SerializeField] private GameObject debugConsoleHelpWindow;
 
 
         private void Start() {
             S_DebugConsoleInput.Instance.OnActionRegister += DebugConsoleInput_OnActionRegister;
+            S_DebugConsoleInput.RegisterConsoleAction("help", S_DebugConsoleInput.MakeActionInfoData(this, "TriggerHelpWindow", "Trigger the window shows all command information."));
+            debugConsoleHelpWindow.SetActive(false);
+
         }
 
         private void DebugConsoleInput_OnActionRegister(object sender, S_DebugConsoleInput.ActionRegisterAgs e) {
@@ -25,6 +29,12 @@ namespace DebugConsole {
                 helpElement.SetMethodContents(element.Key, element.Value);
             }
         }
+
+        public void TriggerHelpWindow() {
+            debugConsoleHelpWindow.SetActive(debugConsoleHelpWindow.activeSelf ? false : true);
+            S_DebugConsoleInput.Instance.FocusInputField();
+        }
+
     }
 
 }
