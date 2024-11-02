@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace DebugConsole {
 
-	public class S_DebugConsoleElement : MonoBehaviour {
+	public class S_DebugConsoleContentElement : MonoBehaviour {
 
 		[SerializeField] TMPro.TMP_InputField debugText;
 		[SerializeField] Button detailButton;

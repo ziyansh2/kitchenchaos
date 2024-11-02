@@ -15,6 +15,11 @@ namespace DebugConsole {
 		private Dictionary<string, ActionInfoData> consoleActionMap = new();
 
 
+		public EventHandler<ActionRegisterAgs> OnActionRegister;
+		public class ActionRegisterAgs : EventArgs {
+			public Dictionary<string, ActionInfoData> consoleActionMap;
+		}
+
 		private void Awake() {
 			if (Instance != null) {
 				DestroyImmediate(gameObject);
@@ -39,19 +44,12 @@ namespace DebugConsole {
 				debugConsoleInput.ActivateInputField();
 			});
 
-			RegisterConsoleAction("help", new ActionInfoData {
-				actionOwner = this,
-				methodInfo = GetPrivateMethodInfo(GetType(), "PrintAllConsoleAction")
-			});
+			RegisterConsoleAction("help", MakeActionInfoData(this, "PrintAllConsoleAction", "Show all command information.", false)); 
 		}
 
 		private void Start() {
 			S_DebugConsole.Instance.OnConsoleWindowTriggered += OnConsoleWindowTriggered;
-
-			RegisterConsoleAction("clear", new ActionInfoData {
-				actionOwner = S_DebugConsole.Instance,
-				methodInfo = GetPublicMethodInfo(typeof(S_DebugConsole), "ClearLog")
-			});
+			RegisterConsoleAction("clear", MakeActionInfoData(S_DebugConsole.Instance, "ClearLog", "Clear all logs."));
 		}
 
 		private void OnDestroy() {
@@ -131,6 +129,7 @@ namespace DebugConsole {
 			} else {
 				consoleActionMap.Add(key.ToLower(), actionInfoData);
 			}
+			OnActionRegister?.Invoke(this, new ActionRegisterAgs() { consoleActionMap = consoleActionMap });
 		}
 
 		private static MethodInfo GetPrivateMethodInfo(Type methodType, string methodName) {

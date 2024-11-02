@@ -41,8 +41,8 @@ namespace DebugConsole {
 		private bool isCollapseTriggered = false;
 
 		//Elements
-		private List<S_DebugConsoleElement> consoleElements = new();
-		private Dictionary<string, S_DebugConsoleElement> collapsedElements = new();
+		private List<S_DebugConsoleContentElement> consoleElements = new();
+		private Dictionary<string, S_DebugConsoleContentElement> collapsedElements = new();
 		private RectTransform debugContentsRoot;
 
 
@@ -82,7 +82,7 @@ namespace DebugConsole {
 
 
 		private void HandleLog(string logString, string stackTrace, LogType type) {
-			S_DebugConsoleElement element = Instantiate(debugConsoleElement, debugContentScrollRect.content).GetComponent<S_DebugConsoleElement>();
+			S_DebugConsoleContentElement element = Instantiate(debugConsoleElement, debugContentScrollRect.content).GetComponent<S_DebugConsoleContentElement>();
 
 			element.SetDebugContents(logString, stackTrace, type);
 			consoleElements.Add(element);
@@ -146,7 +146,7 @@ namespace DebugConsole {
 		}
 
 		private void UpdateAfterFilterUpdate() {
-			foreach (S_DebugConsoleElement consoleElement in consoleElements) {
+			foreach (S_DebugConsoleContentElement consoleElement in consoleElements) {
 				switch (consoleElement.Type) {
 					default:
 					case LogType.Log:
@@ -168,7 +168,7 @@ namespace DebugConsole {
 		}
 
 		private void UpdateCollapseFilter() {
-			foreach (S_DebugConsoleElement consoleElement in consoleElements) {
+			foreach (S_DebugConsoleContentElement consoleElement in consoleElements) {
 				bool isVisible = !isCollapseTriggered || (isCollapseTriggered && collapsedElements.Values.Contains(consoleElement));
 				consoleElement.gameObject.SetActive(isVisible);
 			}
