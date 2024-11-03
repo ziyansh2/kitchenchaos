@@ -7,23 +7,40 @@ using UnityEngine.SceneManagement;
 
 public class KitchenGameMultiplayer : NetworkBehaviour {
 
-    private const int MAX_PLAYER_AMOUNT = 2;
+    private const int MAX_PLAYER_AMOUNT = 4;
 
     public event EventHandler OnTryingToJoinGame;
     public event EventHandler OnFailedToJoinGame;
+    public event EventHandler OnPlayerDataNetworkListChanged;
 
     public static KitchenGameMultiplayer Instance { get; private set; }
 
-    public KitchenObjectListSO kitchenObjectListSO;
+    [SerializeField] private KitchenObjectListSO kitchenObjectListSO;
+    [SerializeField] private List<Color> playerColorList;
+
+    private NetworkList<PlayerData> playerDataNetworkList;
 
     private void Awake() {
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        //Have to initialize here, or it will cause stack leak.
+        playerDataNetworkList = new();
+        playerDataNetworkList.OnListChanged += PlayerDataNetworkList_OnListChanged;
+    }
+
+    private void PlayerDataNetworkList_OnListChanged(NetworkListEvent<PlayerData> changeEvent) {
+        OnPlayerDataNetworkListChanged?.Invoke(this, EventArgs.Empty);
     }
 
     public void StartHost() {
         NetworkManager.Singleton.ConnectionApprovalCallback += NetworkManager_ConnectionApprovalCallback;
+        NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_OnClientConnectedCallback;
         NetworkManager.Singleton.StartHost();
+    }
+
+    private void NetworkManager_OnClientConnectedCallback(ulong clientID) {
+        playerDataNetworkList.Add(new PlayerData() { clientID = clientID });
     }
 
     public void StartClient() {
@@ -101,4 +118,15 @@ public class KitchenGameMultiplayer : NetworkBehaviour {
         return kitchenObjectListSO.kitchenObjectSOList[kithenObjectSoIndex];
     }
 
+    public bool IsPlayerIndexConnected(int playerIndex) {
+        return playerIndex < playerDataNetworkList.Count;
+    }
+
+    public PlayerData GetPlayerDataFromPlayerIndex(int playerIndex) {
+        return playerDataNetworkList[playerIndex];
+    }
+
+    public Color GetPlayerColor(int colorID) {
+        return playerColorList[colorID];
+    }
 }

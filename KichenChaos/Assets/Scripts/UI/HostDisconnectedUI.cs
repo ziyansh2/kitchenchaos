@@ -25,6 +25,10 @@ public class HostDisconnectedUI : MonoBehaviour {
             //Server is shutting down
             Show();
         }
+
+        //Has an engine bug that the clientID sent from the system is wrong
+        //Show the menu what ever the client id is
+        Show();
     }
 
     private void Show() {
