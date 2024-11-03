@@ -32,11 +32,18 @@ namespace DebugConsole {
                 debugConsoleInput = GetComponent<TMPro.TMP_InputField>();
                 debugConsoleInput.onSubmit.AddListener((string inputContent) => {
                     string[] inputArray = inputContent.Split(' ');
-                    string command = inputArray[0];
+                    string command = inputArray[0].ToLower();
 
-                    if (consoleActionMap.ContainsKey(command.ToLower())) {
-                        MethodInfo methodInfo = consoleActionMap[command.ToLower()].methodInfo;
-                        var actionOwner = consoleActionMap[command.ToLower()].actionOwner;
+                    if (consoleActionMap.ContainsKey(command)) {
+                        var actionOwner = consoleActionMap[command].actionOwner;
+                        if (actionOwner == null) {
+                            consoleActionMap.Remove(command);
+                            OnActionRegister?.Invoke(this, new ActionRegisterAgs() { consoleActionMap = consoleActionMap });
+                            Debug.LogWarning($"Console action '{debugConsoleInput.text}' does not exist!");
+                            return;
+                        }
+
+                        MethodInfo methodInfo = consoleActionMap[command].methodInfo;
                         object[] inputParams = CastInputParameters(inputArray, methodInfo);
                         methodInfo.Invoke(actionOwner, inputParams);
                         commandRecord.Add(inputContent);
@@ -136,10 +143,12 @@ namespace DebugConsole {
         }
 
         private void RegisterConsoleActionInternal(string key, ActionInfoData actionInfoData) {
-            if (consoleActionMap.ContainsKey(key.ToLower())) {
-                consoleActionMap[key.ToLower()] = actionInfoData;
+            string command = key.ToLower();
+
+            if (consoleActionMap.ContainsKey(command)) {
+                consoleActionMap[command] = actionInfoData;
             } else {
-                consoleActionMap.Add(key.ToLower(), actionInfoData);
+                consoleActionMap.Add(command, actionInfoData);
             }
             OnActionRegister?.Invoke(this, new ActionRegisterAgs() { consoleActionMap = consoleActionMap });
         }
