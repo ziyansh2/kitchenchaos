@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,10 +14,18 @@ namespace DebugConsole {
 
 
         private void Start() {
+            S_DebugConsole.Instance.OnConsoleWindowTriggered += DebugConsole_OnConsoleWindowTriggered;
+
             S_DebugConsoleInput.Instance.OnActionRegister += DebugConsoleInput_OnActionRegister;
             S_DebugConsoleInput.RegisterConsoleAction("help", S_DebugConsoleInput.MakeActionInfoData(this, "TriggerHelpWindow", "Trigger the window shows all command information."));
             debugConsoleHelpWindow.SetActive(false);
 
+        }
+
+        private void DebugConsole_OnConsoleWindowTriggered(object sender, bool isTriggered) {
+            if (isTriggered == false) {
+                debugConsoleHelpWindow.SetActive(false);
+            }
         }
 
         private void DebugConsoleInput_OnActionRegister(object sender, S_DebugConsoleInput.ActionRegisterAgs e) {

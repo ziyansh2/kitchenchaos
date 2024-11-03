@@ -28,25 +28,25 @@ namespace DebugConsole {
                 DestroyImmediate(gameObject);
             } else {
                 Instance = this;
+
+                debugConsoleInput = GetComponent<TMPro.TMP_InputField>();
+                debugConsoleInput.onSubmit.AddListener((string inputContent) => {
+                    string[] inputArray = inputContent.Split(' ');
+                    string command = inputArray[0];
+
+                    if (consoleActionMap.ContainsKey(command.ToLower())) {
+                        MethodInfo methodInfo = consoleActionMap[command.ToLower()].methodInfo;
+                        var actionOwner = consoleActionMap[command.ToLower()].actionOwner;
+                        object[] inputParams = CastInputParameters(inputArray, methodInfo);
+                        methodInfo.Invoke(actionOwner, inputParams);
+                        commandRecord.Add(inputContent);
+                    } else {
+                        Debug.LogWarning($"Console action '{debugConsoleInput.text}' does not exist!");
+                    }
+                    debugConsoleInput.text = "";
+                    FocusInputField();
+                });
             }
-
-            debugConsoleInput = GetComponent<TMPro.TMP_InputField>();
-            debugConsoleInput.onSubmit.AddListener((string inputContent) => {
-                string[] inputArray = inputContent.Split(' ');
-                string command = inputArray[0];
-
-                if (consoleActionMap.ContainsKey(command.ToLower())) {
-                    MethodInfo methodInfo = consoleActionMap[command.ToLower()].methodInfo;
-                    var actionOwner = consoleActionMap[command.ToLower()].actionOwner;
-                    object[] inputParams = CastInputParameters(inputArray, methodInfo);
-                    methodInfo.Invoke(actionOwner, inputParams);
-                    commandRecord.Add(inputContent);
-                } else {
-                    Debug.LogWarning($"Console action '{debugConsoleInput.text}' does not exist!");
-                }
-                debugConsoleInput.text = "";
-                FocusInputField();
-            });
         }
 
         private void Start() {
@@ -55,7 +55,7 @@ namespace DebugConsole {
         }
 
         private void OnDestroy() {
-            debugConsoleInput.onSubmit.RemoveAllListeners();
+            debugConsoleInput?.onSubmit.RemoveAllListeners();
         }
 
         private void Update() {

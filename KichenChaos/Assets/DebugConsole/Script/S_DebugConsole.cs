@@ -30,6 +30,9 @@ namespace DebugConsole {
 		[Space(10), Header("Input")]
 		[SerializeField] private KeyCode debugConsoleTrigger = KeyCode.F12;
 
+		[Space(10), Header("Others")]
+		[SerializeField] private bool isAvailableOnShippingBuild = false;
+
 		//Visual
 		private float initHeight;
 		private float windowPosition;
@@ -47,13 +50,22 @@ namespace DebugConsole {
 
 
 		private void Awake() {
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
 			if (Instance != null) {
-				DestroyImmediate(gameObject);
+				DestroyImmediate(gameObject);	
 			} else {
 				Instance = this;
+				DontDestroyOnLoad(gameObject);
+
+				initHeight = displayRect.anchoredPosition.y;
+				debugContentsRoot = debugContentScrollRect.GetComponent<RectTransform>();
 			}
-			initHeight = displayRect.anchoredPosition.y;
-			debugContentsRoot = debugContentScrollRect.GetComponent<RectTransform>();
+#else
+				if(!isAvailableOnShippingBuild){
+					DestroyImmediate(Instance.gameObject);
+					return;
+				}
+#endif
 		}
 
 		private void OnEnable() {
