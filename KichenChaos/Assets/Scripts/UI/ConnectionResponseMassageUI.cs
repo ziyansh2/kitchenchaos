@@ -28,6 +28,10 @@ public class ConnectionResponseMassageUI : MonoBehaviour
     private void KitchenGameMultiplayer_OnFailedToJoinGame(object sender, EventArgs e) {
         Show();
         messageText.text = NetworkManager.Singleton.DisconnectReason;
+
+        if (messageText.text == "") {
+            messageText.text = "Failed to connect";
+        }
     }
 
     private void Hide() {

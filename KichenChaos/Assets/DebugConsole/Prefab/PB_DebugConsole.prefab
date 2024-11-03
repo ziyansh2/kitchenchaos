@@ -846,7 +846,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 990
   m_TargetDisplay: 0
 --- !u!114 &8098905353720133813
 MonoBehaviour:
@@ -909,6 +909,7 @@ MonoBehaviour:
   stackTraceTitleText: {fileID: 4733210338689816697}
   stackTraceText: {fileID: 7593235455015129587}
   debugConsoleTrigger: 293
+  isAvailableOnShippingBuild: 0
 --- !u!1 &825121746870371400
 GameObject:
   m_ObjectHideFlags: 0
@@ -4115,7 +4116,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: -0}
-  m_SizeDelta: {x: 750, y: 0}
+  m_SizeDelta: {x: 736, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &8401172734562248267
 CanvasRenderer:
@@ -4942,7 +4943,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 995
   m_TargetDisplay: 0
 --- !u!114 &7884694788905825613
 MonoBehaviour:
@@ -5815,7 +5816,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000011444092}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &8649971481722816742
