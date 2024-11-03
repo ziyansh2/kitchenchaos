@@ -37,8 +37,7 @@ namespace DebugConsole {
                     if (consoleActionMap.ContainsKey(command)) {
                         var actionOwner = consoleActionMap[command].actionOwner;
                         if (actionOwner == null) {
-                            consoleActionMap.Remove(command);
-                            OnActionRegister?.Invoke(this, new ActionRegisterAgs() { consoleActionMap = consoleActionMap });
+                            RefreshConsoleActionMap();
                             Debug.LogWarning($"Console action '{debugConsoleInput.text}' does not exist!");
                             return;
                         }
@@ -54,6 +53,19 @@ namespace DebugConsole {
                     FocusInputField();
                 });
             }
+        }
+
+        private void RefreshConsoleActionMap() {
+            List<string> removeList = new ();
+            foreach (var element in consoleActionMap) {
+                if (element.Value.actionOwner == null) {
+                    removeList.Add(element.Key);
+                }
+            }
+            for (int i = 0; i < removeList.Count; i++) {
+                consoleActionMap.Remove(removeList[i]);
+            }
+            OnActionRegister?.Invoke(this, new ActionRegisterAgs() { consoleActionMap = consoleActionMap });
         }
 
         private void Start() {

@@ -102,7 +102,12 @@ namespace DebugConsole {
 			} else {
 				collapsedElements.Add(logString, element);
 			}
-			
+
+			//Open the window if the log is an error
+			if (type == LogType.Error) {
+				consoleSlider.value = consoleSlider.maxValue;
+			}
+
 			UpdateCollapseFilter();
 		}
 

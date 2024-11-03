@@ -7,8 +7,8 @@ using UnityEngine.SceneManagement;
 public static class Loader {
 
 
-	public enum Scene { 
-		SC_MainMenuScene,
+	public enum Scene {
+		SC_MainMenu,
 		SC_Gameplay,
 		SC_Loading,
 		SC_Lobby,

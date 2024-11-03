@@ -11,16 +11,16 @@ public class HostDisconnectedUI : MonoBehaviour {
     private void Awake() {
         playAgainButton.onClick.AddListener(() => {
             NetworkManager.Singleton.Shutdown();
-            Loader.Load(Loader.Scene.SC_MainMenuScene);
+            Loader.Load(Loader.Scene.SC_MainMenu);
         });
     }
 
     private void Start() {
-        NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_OnClientConnectedCallback;
+        NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_OnClientDisconnectedCallback;
         Hide();
     }
 
-    private void NetworkManager_OnClientConnectedCallback(ulong clientID) {
+    private void NetworkManager_OnClientDisconnectedCallback(ulong clientID) {
         if (clientID == NetworkManager.ServerClientId) {
             //Server is shutting down
             Show();
