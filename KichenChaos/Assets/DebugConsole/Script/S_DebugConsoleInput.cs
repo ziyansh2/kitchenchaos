@@ -69,6 +69,8 @@ namespace DebugConsole {
         }
 
         private void Start() {
+            if (S_DebugConsole.Instance == null) return;
+
             S_DebugConsole.Instance.OnConsoleWindowTriggered += OnConsoleWindowTriggered;
             RegisterConsoleAction("clear", MakeActionInfoData(S_DebugConsole.Instance, "ClearLog", "Clear all logs."));
         }
@@ -131,6 +133,8 @@ namespace DebugConsole {
 
 
         public static void RegisterConsoleAction(string key, ActionInfoData actionInfoData) {
+            if (actionInfoData == null) return;
+
             Instance.RegisterConsoleActionInternal(key, actionInfoData);
         }
 

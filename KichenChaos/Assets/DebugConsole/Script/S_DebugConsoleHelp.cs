@@ -14,12 +14,17 @@ namespace DebugConsole {
 
 
         private void Start() {
+            //The help window rely on the debug console and debug console input
+            if (S_DebugConsole.Instance == null || S_DebugConsoleInput.Instance == null) {
+                debugConsoleHelpWindow.SetActive(false);
+                return;
+            }
+
             S_DebugConsole.Instance.OnConsoleWindowTriggered += DebugConsole_OnConsoleWindowTriggered;
 
             S_DebugConsoleInput.Instance.OnActionRegister += DebugConsoleInput_OnActionRegister;
             S_DebugConsoleInput.RegisterConsoleAction("help", S_DebugConsoleInput.MakeActionInfoData(this, "TriggerHelpWindow", "Trigger the window shows all command information."));
             debugConsoleHelpWindow.SetActive(false);
-
         }
 
         private void DebugConsole_OnConsoleWindowTriggered(object sender, bool isTriggered) {
@@ -41,7 +46,7 @@ namespace DebugConsole {
 
         public void TriggerHelpWindow() {
             debugConsoleHelpWindow.SetActive(debugConsoleHelpWindow.activeSelf ? false : true);
-            S_DebugConsoleInput.Instance.FocusInputField();
+            S_DebugConsoleInput.Instance?.FocusInputField();
         }
 
     }
