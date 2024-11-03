@@ -30,8 +30,10 @@ namespace DebugConsole {
 		[Space(10), Header("Input")]
 		[SerializeField] private KeyCode debugConsoleTrigger = KeyCode.F12;
 
+#pragma warning disable CS0414 // Made but not used: Used in #code
 		[Space(10), Header("Others")]
 		[SerializeField] private bool isAvailableOnShippingBuild = false;
+#pragma warning restore CS0414 // Made but not used: Used in #code
 
 		//Visual
 		private float initHeight;
