@@ -20,15 +20,15 @@ public class HostDisconnectedUI : MonoBehaviour {
         Hide();
     }
 
+    private void OnDestroy() {
+        NetworkManager.Singleton.OnClientDisconnectCallback -= NetworkManager_OnClientDisconnectedCallback;
+    }
+
     private void NetworkManager_OnClientDisconnectedCallback(ulong clientID) {
         if (clientID == NetworkManager.ServerClientId) {
             //Server is shutting down
             Show();
         }
-
-        //Has an engine bug that the clientID sent from the system is wrong
-        //Show the menu what ever the client id is
-        Show();
     }
 
     private void Show() {

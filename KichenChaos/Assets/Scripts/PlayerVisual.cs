@@ -17,7 +17,7 @@ public class PlayerVisual : MonoBehaviour {
     }
 
     private void Start() {
-        //SetPlayerColor(KitchenGameMultiplayer.Instance.GetPlayerColor());
+        
     }
 
     public void SetPlayerColor(Color color) {
