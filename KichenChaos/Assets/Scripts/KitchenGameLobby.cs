@@ -6,6 +6,7 @@ using Unity.Services.Core;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class KitchenGameLobby : MonoBehaviour {
 
@@ -41,6 +42,7 @@ public class KitchenGameLobby : MonoBehaviour {
     private void HandlePeriodicListLobbies() {
         if (joinedLobby != null) return;
         if (!AuthenticationService.Instance.IsSignedIn) return;
+        if (SceneManager.GetActiveScene().name != Loader.Scene.SC_Lobby.ToString()) return;
 
         listLobbiesTimer -= Time.deltaTime;
         if (listLobbiesTimer <= 0) {

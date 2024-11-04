@@ -25,6 +25,15 @@ public class LobbyMassageUI : MonoBehaviour
         KitchenGameLobby.Instance.OnJoinFailed += KitchenGameLobby_OnJoinFailed;
         Hide();
     }
+    void OnDestroy() {
+        KitchenGameMultiplayer.Instance.OnFailedToJoinGame -= KitchenGameMultiplayer_OnFailedToJoinGame;
+        KitchenGameLobby.Instance.OnCreateLobbyStarted -= KitchenGameLobby_OnCreateLobbyStarted;
+        KitchenGameLobby.Instance.OnCreateLobbyFailed -= KitchenGameLobby_OnCreateLobbyFailed;
+        KitchenGameLobby.Instance.OnJoinStarted -= KitchenGameLobby_OnJoinStarted;
+        KitchenGameLobby.Instance.OnQuickJoinFailed -= KitchenGameLobby_OnQuickJoinFailed;
+        KitchenGameLobby.Instance.OnJoinFailed -= KitchenGameLobby_OnJoinFailed;
+    }
+
 
     private void KitchenGameLobby_OnJoinFailed(object sender, EventArgs e) {
         ShowMessage("Failed to join lobby!");
@@ -44,10 +53,6 @@ public class LobbyMassageUI : MonoBehaviour
 
     private void KitchenGameLobby_OnCreateLobbyFailed(object sender, EventArgs e) {
         ShowMessage("Failed to create Lobby!");
-    }
-
-    void OnDestroy() {
-        KitchenGameMultiplayer.Instance.OnFailedToJoinGame -= KitchenGameMultiplayer_OnFailedToJoinGame;
     }
 
     private void KitchenGameMultiplayer_OnFailedToJoinGame(object sender, EventArgs e) {
