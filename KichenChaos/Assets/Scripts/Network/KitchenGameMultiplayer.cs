@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.Netcode.Transports.UTP;
+using Unity.Networking.Transport.Relay;
 using Unity.Services.Authentication;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -16,6 +18,8 @@ public class KitchenGameMultiplayer : NetworkBehaviour {
     public event EventHandler OnPlayerDataNetworkListChanged;
 
     public static KitchenGameMultiplayer Instance { get; private set; }
+    public static bool playMultiplayer;
+    
     public int NetworkManager_Client_OnClientConnectCallback { get; private set; }
 
     [SerializeField] private KitchenObjectListSO kitchenObjectListSO;
@@ -33,6 +37,15 @@ public class KitchenGameMultiplayer : NetworkBehaviour {
         //Have to initialize here, or it will cause stack leak.
         playerDataNetworkList = new();
         playerDataNetworkList.OnListChanged += PlayerDataNetworkList_OnListChanged;
+    }
+
+    private void Start() {
+        if (playMultiplayer) { 
+        
+        } else {
+            StartHost();
+            Loader.LoadNetwork(Loader.Scene.SC_Multiplayer);
+        }
     }
 
     public string GetPlayerName() { 
