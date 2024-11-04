@@ -29,6 +29,9 @@ public class CharacterSelectReady : NetworkBehaviour {
         foreach (ulong clientID in NetworkManager.Singleton.ConnectedClientsIds) {
             if (!playerReadyDictionary.ContainsKey(clientID) || playerReadyDictionary[clientID] == false) return;
         }
+
+        //All players ready
+        KitchenGameLobby.Instance.DeleteLobby();
         Loader.LoadNetwork(Loader.Scene.SC_Multiplayer);
     }
 

@@ -26,7 +26,7 @@ public class HostDisconnectedUI : MonoBehaviour {
     }
 
     private void NetworkManager_OnClientDisconnectedCallback(ulong clientID) {
-        if (clientID == NetworkManager.ServerClientId) {
+        if (clientID == NetworkManager.ServerClientId || clientID == NetworkManager.Singleton.LocalClientId) {
             //Server is shutting down
             Show();
         }
