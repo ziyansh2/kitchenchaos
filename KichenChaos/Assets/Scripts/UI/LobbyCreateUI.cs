@@ -13,10 +13,10 @@ public class LobbyCreateUI : MonoBehaviour
 
     private void Awake() {
         createPublicButton.onClick.AddListener(() => {
-            KitchenGameLobby.Instance.CreateLobbyAsync(lobbyNameInputField.text, false);
+            KitchenGameLobby.Instance.CreateLobby(lobbyNameInputField.text, false);
         });
         createPrivateButton.onClick.AddListener(() => {
-            KitchenGameLobby.Instance.CreateLobbyAsync(lobbyNameInputField.text, true);
+            KitchenGameLobby.Instance.CreateLobby(lobbyNameInputField.text, true);
         });
         closeButton.onClick.AddListener(() => {
             Hide();

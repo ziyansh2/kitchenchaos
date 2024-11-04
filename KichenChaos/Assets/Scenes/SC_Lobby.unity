@@ -275,10 +275,10 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 528556861}
-  - {fileID: 1616211631}
-  - {fileID: 989186606}
   - {fileID: 1898752416}
   - {fileID: 83939103}
+  - {fileID: 1616211631}
+  - {fileID: 989186606}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -3227,7 +3227,7 @@ GameObject:
   - component: {fileID: 1616211631}
   - component: {fileID: 1616211632}
   m_Layer: 5
-  m_Name: ConnectionResponseMassageUI
+  m_Name: LobbyMassageUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
