@@ -18,7 +18,7 @@ public class KitchenGameMultiplayer : NetworkBehaviour {
     public event EventHandler OnPlayerDataNetworkListChanged;
 
     public static KitchenGameMultiplayer Instance { get; private set; }
-    public static bool playMultiplayer;
+    public static bool playMultiplayer = true;
     
     public int NetworkManager_Client_OnClientConnectCallback { get; private set; }
 
